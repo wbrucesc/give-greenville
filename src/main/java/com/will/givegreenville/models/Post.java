@@ -12,13 +12,17 @@ public class Post {
     private long id;
 
     private String title;
-    private String desc;
+    private String description;
     private String location;
     private String category;
-    private Date date;
+//    private Date date;
 
     public Post() {
     }
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private User author;
 
     public long getId() {
         return id;
@@ -36,12 +40,12 @@ public class Post {
         this.title = title;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getLocation() {
@@ -60,11 +64,19 @@ public class Post {
         this.category = category;
     }
 
-    public Date getDate() {
-        return date;
+//    public Date getDate() {
+//        return date;
+//    }
+//
+//    public void setDate(Date date) {
+//        this.date = date;
+//    }
+
+    public User getAuthor() {
+        return author;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 }
