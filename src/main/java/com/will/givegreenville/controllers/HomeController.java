@@ -35,10 +35,16 @@ public class HomeController {
         return "about";
     }
 
+    @RequestMapping("/ask")
+    public String askPage(Model model) {
+        model.addAttribute("asks", postRepo.findAllByCategory("Ask"));
+        return "ask";
+    }
+
     // give page lists all posts with category of give
     @RequestMapping("/give")
     public String givePage(Model model) {
-        model.addAttribute("myPosts", postRepo.findAllByCategoryEquals("Give"));
+        model.addAttribute("myPosts", postRepo.findAllByCategory("Give"));
         return "give";
     }
 
@@ -49,6 +55,7 @@ public class HomeController {
         return "create";
     }
 
+    // creates new post
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String createPost(@ModelAttribute Post post,
                              Principal principal) {
@@ -57,4 +64,6 @@ public class HomeController {
         postRepo.save(post);
         return "redirect:/";
     }
+
+
 }
