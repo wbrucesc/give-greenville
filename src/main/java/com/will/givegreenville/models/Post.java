@@ -2,6 +2,7 @@ package com.will.givegreenville.models;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -23,6 +24,17 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "author_id")
     private User author;
+
+    @OneToMany(mappedBy = "post")
+    private List<Consideration> considerations;
+
+    public List<Consideration> getConsiderations() {
+        return considerations;
+    }
+
+    public void setConsiderations(List<Consideration> considerations) {
+        this.considerations = considerations;
+    }
 
     public long getId() {
         return id;
@@ -79,4 +91,6 @@ public class Post {
     public void setAuthor(User author) {
         this.author = author;
     }
+
+
 }

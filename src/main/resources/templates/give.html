@@ -37,10 +37,29 @@
             </div>
         </div>
     </nav>
+    <div class="container">
+        <h1>Give Listings</h1>
+    </div>
 
-    <h1>Give listings</h1>
-        <ul th:each="post : ${myPosts}">
-            <li th:text="${post.title}"></li>
-        </ul>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-1" th:each="give: ${gives}">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" th:text="${give.title}">Panel title</h3>
+                    </div>
+                    <div class="panel-body">
+                        <label class="control-label" for="desc">Description</label>
+                        <div th:text="${give.description}" id="desc"></div>
+                        <hr/>
+                        <label class="control-label" for="loc">Location</label>
+                        <div th:text="${give.location}" id="loc"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>

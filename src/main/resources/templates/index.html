@@ -44,14 +44,38 @@
             <h1 class="pull-left">Recent Posts</h1>
             <a class="btn btn-primary pull-right" href="/create">Create New Post</a>
         </div>
-        <ul th:each="post : ${posts}">
-            <h3 th:text="${post.title} + ' ' + '(' + ${post.category} + ')'"></h3>
-            <li th:text="${post.location}"></li>
-            <li th:text="${post.description}"></li>
-            <li th:text="${post.author.username}"></li>
-        </ul>
-    </div>
+        <!--<ul th:each="post : ${posts}">-->
+            <!--<h3 th:text="${post.title} + ' ' + '(' + ${post.category} + ')'"></h3>-->
+            <!--<li th:text="${post.location}"></li>-->
+            <!--<li th:text="${post.description}"></li>-->
+            <!--<li th:text="${post.author.username}"></li>-->
+        <!--</ul>-->
 
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-1" th:each="post: ${posts}">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title" th:text="${post.title} + ' ' + '(' + ${post.category} + ')'">Panel title</h3>
+                        </div>
+                        <div class="panel-body">
+                            <label class="control-label" for="desc">Description</label>
+                            <div th:text="${post.description}" id="desc"></div>
+                            <hr/>
+                            <label class="control-label" for="loc">Location</label>
+                            <div th:text="${post.location}" id="loc"></div>
+                            <div th:text="${post.author.username}"></div>
+
+                            <form th:action="@{'/consider/' + ${post.id}}" method="POST">
+                                <input class="btn btn-default btn-sm pull-right" type="submit" value="Consider Me"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 </body>

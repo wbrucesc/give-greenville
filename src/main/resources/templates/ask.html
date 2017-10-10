@@ -39,18 +39,20 @@
         </div>
     </nav>
 
+    <div class="container">
+        <h1>Ask Listings</h1>
+    </div>
 
     <div class="container">
         <div class="row">
-            <div class="col-md-4" th:each="ask: ${asks}">
+            <div class="col-lg-8 col-lg-offset-1" th:each="ask: ${asks}">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
+                        <h3 class="panel-title" th:text="${ask.title}">Panel title</h3>
                     </div>
                     <div class="panel-body">
-                        <div></div>
-                        <div></div>
-                        <div></div>
+                        <div th:text="${ask.description}"></div>
+                        <div th:text="${ask.location}"></div>
                     </div>
                 </div>
             </div>
