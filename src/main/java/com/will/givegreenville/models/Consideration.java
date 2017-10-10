@@ -11,6 +11,8 @@ public class Consideration {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private String comment;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -42,4 +44,14 @@ public class Consideration {
     public void setPost(Post post) {
         this.post = post;
     }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+
 }

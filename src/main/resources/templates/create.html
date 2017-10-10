@@ -55,7 +55,8 @@
             <div class="form-group">
                 <label class="control-label col-lg-2">Category</label>
                 <div class="col-lg-6">
-                    <select class="form-control" name="categories" th:field="*{category}">
+                    <select class="form-control" name="categories" th:field="*{category}" th:required="true">
+                        <option value="">Select Type of Post</option>
                         <option value="Give">Give</option>
                         <option value="Ask">Ask</option>
                         <option value="Flash Give">Flash Give</option>
@@ -81,7 +82,7 @@
 
             <div class="form-group">
                 <div class="col-lg-6 col-lg-offset-2">
-                    <input class="btn btn-success" type="submit" value="Submit"/>
+                    <input class="btn btn-success pull-right" type="submit" value="Submit"/>
                 </div>
 
             </div>

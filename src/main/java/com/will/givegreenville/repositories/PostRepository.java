@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface PostRepository extends CrudRepository<Post, Long> {
     List<Post> findAllByCategory(String categoryName);
+    List<Post> OrderByIdDesc();
 }
