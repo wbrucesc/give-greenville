@@ -1,6 +1,9 @@
 package com.will.givegreenville.models;
 
+import org.springframework.data.annotation.CreatedDate;
+
 import javax.persistence.*;
+import java.time.DateTimeException;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +14,9 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created;
 
     private String title;
     private String description;
@@ -92,5 +98,11 @@ public class Post {
         this.author = author;
     }
 
+    public Date getCreated() {
+        return created;
+    }
 
+    public void setCreated(Date created) {
+        this.created = created;
+    }
 }

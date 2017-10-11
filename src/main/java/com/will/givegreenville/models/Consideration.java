@@ -1,6 +1,7 @@
 package com.will.givegreenville.models;
 
 import javax.persistence.*;
+import java.util.Date;
 
 
 @Entity
@@ -12,6 +13,9 @@ public class Consideration {
     private long id;
 
     private String comment;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -53,5 +57,11 @@ public class Consideration {
         this.comment = comment;
     }
 
+    public Date getCreated() {
+        return created;
+    }
 
+    public void setCreated(Date created) {
+        this.created = created;
+    }
 }

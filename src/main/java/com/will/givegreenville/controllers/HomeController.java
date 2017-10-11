@@ -9,12 +9,10 @@ import com.will.givegreenville.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Date;
 
 @Controller
 public class HomeController {
@@ -31,7 +29,7 @@ public class HomeController {
     // home page lists recent posts
     @RequestMapping("/")
     public String index(Model model) {
-        model.addAttribute("posts", postRepo.OrderByIdDesc());
+        model.addAttribute("posts", postRepo.OrderByCreatedDesc());
         return "index";
     }
 
@@ -44,15 +42,22 @@ public class HomeController {
     // ask page lists all ask posts
     @RequestMapping("/ask")
     public String askPage(Model model) {
-        model.addAttribute("asks", postRepo.findAllByCategory("Ask"));
+        model.addAttribute("asks", postRepo.findAllByCategoryOrderByCreatedDesc("Ask"));
         return "ask";
     }
 
     // give page lists all posts with category of give
     @RequestMapping("/give")
     public String givePage(Model model) {
-        model.addAttribute("gives", postRepo.findAllByCategory("Give"));
+        model.addAttribute("gives", postRepo.findAllByCategoryOrderByCreatedDesc("Give"));
         return "give";
+    }
+
+    // flash give page lists all flash give posts
+    @RequestMapping("/flash")
+    public String flashPage(Model model) {
+        model.addAttribute("flashes", postRepo.findAllByCategoryOrderByCreatedDesc("Flash Give"));
+        return "flashGive";
     }
 
     // takes you to create post page
@@ -76,6 +81,7 @@ public class HomeController {
         User me = userRepo.findByUsername(principal.getName());
         post.setAuthor(me);
         post.setCategory("Ask");
+        post.setCreated(new Date());
         postRepo.save(post);
         return "redirect:/ask";
     }
@@ -94,6 +100,7 @@ public class HomeController {
         User me = userRepo.findByUsername(principal.getName());
         post.setAuthor(me);
         post.setCategory("Give");
+        post.setCreated(new Date());
         postRepo.save(post);
         return "redirect:/give";
     }
@@ -105,6 +112,7 @@ public class HomeController {
                              Principal principal) {
         User me = userRepo.findByUsername(principal.getName());
         post.setAuthor(me);
+        post.setCreated(new Date());
         postRepo.save(post);
         return "redirect:/";
     }
@@ -126,9 +134,14 @@ public class HomeController {
                            Principal principal) {
         Post post = postRepo.findOne(postId);
         User me = userRepo.findByUsername(principal.getName());
-        consideration.setUser(me);
-        consideration.setPost(post);
-        considerRepo.save(consideration);
+        Consideration userConsideration = considerRepo.findConsiderationByPostIdAndUser(postId, me);
+        if (userConsideration == null) {
+            consideration.setUser(me);
+            consideration.setPost(post);
+            consideration.setCreated(new Date());
+            considerRepo.save(consideration);
+            return "redirect:/";
+        }
         return "redirect:/";
     }
 
@@ -140,6 +153,13 @@ public class HomeController {
         model.addAttribute("post", targetPost);
         model.addAttribute("considerations", targetPost.getConsiderations());
         return "detail";
+    }
+
+    @RequestMapping("/results")
+    public String searchResults(Model model,
+                                @RequestParam("search") String searchString) {
+        model.addAttribute("posts", postRepo.findAllByTitleContainsIgnoreCase(searchString));
+        return "index";
     }
 
 

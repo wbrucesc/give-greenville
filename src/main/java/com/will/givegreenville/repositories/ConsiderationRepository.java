@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ConsiderationRepository extends CrudRepository<Consideration, Long> {
+    Consideration findConsiderationByPostIdAndUser(long postId, User user);
 }
