@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.Date;
 
@@ -26,7 +27,7 @@ public class HomeController {
     @Autowired
     private ConsiderationRepository considerRepo;
 
-    // home page lists recent posts
+    // home page lists recent posts in order of date created (newest to oldest)
     @RequestMapping("/")
     public String index(Model model) {
         model.addAttribute("posts", postRepo.OrderByCreatedDesc());
@@ -39,42 +40,53 @@ public class HomeController {
         return "about";
     }
 
-    // ask page lists all ask posts
+    // ask page lists all ASK posts
     @RequestMapping("/ask")
     public String askPage(Model model) {
         model.addAttribute("asks", postRepo.findAllByCategoryOrderByCreatedDesc("Ask"));
         return "ask";
     }
 
-    // give page lists all posts with category of give
+    // give page lists all posts with category of GIVE
     @RequestMapping("/give")
     public String givePage(Model model) {
         model.addAttribute("gives", postRepo.findAllByCategoryOrderByCreatedDesc("Give"));
         return "give";
     }
 
-    // flash give page lists all flash give posts
+    // flash give page lists ALL FLASH GIVE posts
     @RequestMapping("/flash")
     public String flashPage(Model model) {
         model.addAttribute("flashes", postRepo.findAllByCategoryOrderByCreatedDesc("Flash Give"));
         return "flashGive";
     }
 
-    // takes you to create post page
+    // takes you to CREATE GENERAL POST FORM
     @RequestMapping("/create")
     public String createForm(Model model) {
         model.addAttribute("post", new Post());
         return "create";
     }
 
-    // takes you to create ask post form
+    // creates new GENERAL (ask, give, flash give) post
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public String createPost(@ModelAttribute Post post,
+                             Principal principal) {
+        User me = userRepo.findByUsername(principal.getName());
+        post.setAuthor(me);
+        post.setCreated(new Date());
+        postRepo.save(post);
+        return "redirect:/";
+    }
+
+    // takes you to create ASK POST FORM
     @RequestMapping("/createAsk")
     public String askForm(Model model) {
         model.addAttribute("post", new Post());
         return "createAsk";
     }
 
-    // creates new ask post
+    // creates NEW ASK post
     @RequestMapping(value = "/createAsk", method = RequestMethod.POST)
     public String createAskPost(@ModelAttribute Post post,
                                 Principal principal) {
@@ -86,14 +98,14 @@ public class HomeController {
         return "redirect:/ask";
     }
 
-    // takes you to create give post form
+    // takes you to create GIVE POST FORM
     @RequestMapping("/createGive")
     public String giveForm(Model model) {
         model.addAttribute("post", new Post());
         return "createGive";
     }
 
-    // creates new give post
+    // creates NEW GIVE post
     @RequestMapping(value = "/createGive", method = RequestMethod.POST)
     public String createGivePost(@ModelAttribute Post post,
                                  Principal principal) {
@@ -105,19 +117,29 @@ public class HomeController {
         return "redirect:/give";
     }
 
-
-    // creates new post
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String createPost(@ModelAttribute Post post,
-                             Principal principal) {
-        User me = userRepo.findByUsername(principal.getName());
-        post.setAuthor(me);
-        post.setCreated(new Date());
-        postRepo.save(post);
-        return "redirect:/";
+    // takes you to create FLASH GIVE FORM
+    @RequestMapping("/createFlash")
+    public String flashForm(Model model) {
+        model.addAttribute("post", new Post());
+        return "createFlash";
     }
 
-    // takes you to create a consideration page
+    @RequestMapping(value = "/createFlash", method = RequestMethod.POST)
+    public String createFlashPost(@ModelAttribute Post post,
+                                  Principal principal) {
+        User me = userRepo.findByUsername(principal.getName());
+        post.setAuthor(me);
+        post.setCategory("Flash Give");
+        post.setCreated(new Date());
+        postRepo.save(post);
+        return "redirect:/flash";
+    }
+
+
+
+
+
+    // takes you to create a CONSIDERATION page
     @RequestMapping("/consider/{postId}")
     public String considerForm(Model model,
                                @PathVariable("postId") long postId,
@@ -127,10 +149,11 @@ public class HomeController {
         return "consider";
     }
 
-    // creates a new consider on a post
+    // creates a NEW CONSIDER on a post
     @RequestMapping(value = "/consider/{postId}", method = RequestMethod.POST)
     public String consider(@PathVariable("postId") Long postId,
                            @ModelAttribute Consideration consideration,
+                           HttpServletRequest request,
                            Principal principal) {
         Post post = postRepo.findOne(postId);
         User me = userRepo.findByUsername(principal.getName());
@@ -145,7 +168,7 @@ public class HomeController {
         return "redirect:/";
     }
 
-    // detail page lists post info and all considerations for that post
+    // detail page LISTS post info and ALL CONSIDERATIONS for that post
     @RequestMapping("/detail/{postId}")
     public String detail(Model model,
                          @PathVariable("postId") long postId) {
@@ -155,12 +178,14 @@ public class HomeController {
         return "detail";
     }
 
+    // search for index page
     @RequestMapping("/results")
     public String searchResults(Model model,
                                 @RequestParam("search") String searchString) {
         model.addAttribute("posts", postRepo.findAllByTitleContainsIgnoreCase(searchString));
         return "index";
     }
+
 
 
 }

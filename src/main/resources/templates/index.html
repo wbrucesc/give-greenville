@@ -51,6 +51,7 @@
             <h1 class="pull-left">Recent Posts</h1>
             <a class="btn btn-success pull-right" href="/create">Create New Post</a>
         </div>
+    </div>
 
         <div class="container">
             <div class="row">
@@ -66,8 +67,10 @@
                 <div class="col-lg-8" th:each="post: ${posts}">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h2 class="panel-title post-title" th:text="${post.title} + ' ' + '(' + ${post.category} + ')'">Panel title</h2>
+                            <h2 class="panel-title post-title" th:text="${post.title} + ' ' + '(' + ${post.category} + ')'"></h2>
+                                <!--<a class="btn btn-danger btn-sm pull-right" href="#">Delete</a>-->
                         </div>
+
                         <div class="panel-body">
                             <label class="control-label" for="desc">Description</label>
                             <div th:text="${post.description}" id="desc"></div>
@@ -77,6 +80,8 @@
                             <br/>
                             <label class="control-label" for="poster">Poster:</label>
                             <span class="inline" th:text="${post.author.username}" id="poster"></span>
+                            <br/>
+                            <span th:text="${post.created}"></span>
                             <hr/>
                             <a class="btn btn-primary btn-sm" th:href="@{'/detail/' + ${post.id}}">Considerations <span class="badge" th:text="${post.considerations.size()}"></span></a>
 
@@ -86,7 +91,7 @@
                 </div>
             </div>
         </div>
-    </div>
+
 
 
 </body>
