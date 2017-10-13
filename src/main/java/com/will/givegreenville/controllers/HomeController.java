@@ -124,6 +124,7 @@ public class HomeController {
         return "createFlash";
     }
 
+    // creates a new FLASH GIVE post
     @RequestMapping(value = "/createFlash", method = RequestMethod.POST)
     public String createFlashPost(@ModelAttribute Post post,
                                   Principal principal) {
@@ -179,13 +180,36 @@ public class HomeController {
     }
 
     // search for index page
-    @RequestMapping("/results")
+    @RequestMapping("/indexResults")
     public String searchResults(Model model,
                                 @RequestParam("search") String searchString) {
         model.addAttribute("posts", postRepo.findAllByTitleContainsIgnoreCase(searchString));
         return "index";
     }
 
+    // search for ask page
+    @RequestMapping("/askResults")
+    public String askSearchResults(Model model,
+                                @RequestParam("askSearch") String searchString) {
+        model.addAttribute("asks", postRepo.findAllByCategoryAndTitleContainsIgnoreCase("Ask", searchString));
+        return "ask";
+    }
+
+    // search for give page
+    @RequestMapping("/giveResults")
+    public String giveSearchResults(Model model,
+                                   @RequestParam("giveSearch") String searchString) {
+        model.addAttribute("gives", postRepo.findAllByCategoryAndTitleContainsIgnoreCase("Give", searchString));
+        return "give";
+    }
+
+    // search flash give page
+    @RequestMapping("/flashResults")
+    public String flashGiveSearchResults(Model model,
+                                    @RequestParam("flashSearch") String searchString) {
+        model.addAttribute("flashes", postRepo.findAllByCategoryAndTitleContainsIgnoreCase("Flash Give", searchString));
+        return "flashGive";
+    }
 
 
 }

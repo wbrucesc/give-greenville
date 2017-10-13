@@ -31,7 +31,8 @@ public class Post {
     @JoinColumn(name = "author_id")
     private User author;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post",
+    cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Consideration> considerations;
 
     public List<Consideration> getConsiderations() {
