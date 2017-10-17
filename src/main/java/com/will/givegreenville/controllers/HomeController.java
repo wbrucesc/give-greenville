@@ -137,9 +137,6 @@ public class HomeController {
     }
 
 
-
-
-
     // takes you to create a CONSIDERATION page
     @RequestMapping("/consider/{postId}")
     public String considerForm(Model model,
@@ -159,7 +156,7 @@ public class HomeController {
         Post post = postRepo.findOne(postId);
         User me = userRepo.findByUsername(principal.getName());
         Consideration userConsideration = considerRepo.findConsiderationByPostIdAndUser(postId, me);
-        if (userConsideration == null) {
+        if (userConsideration == null || post.getAuthor() != me) {
             consideration.setUser(me);
             consideration.setPost(post);
             consideration.setCreated(new Date());
@@ -169,7 +166,7 @@ public class HomeController {
         return "redirect:/";
     }
 
-    // detail page LISTS post info and ALL CONSIDERATIONS for that post
+    // POST DETAIL page LISTS post info and ALL CONSIDERATIONS for that post
     @RequestMapping("/detail/{postId}")
     public String detail(Model model,
                          @PathVariable("postId") long postId) {
