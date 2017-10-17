@@ -14,4 +14,5 @@ public interface PostRepository extends CrudRepository<Post, Long> {
     List<Post> findAllByCategoryOrderByCreatedDesc(String categoryName);
     List<Post> findAllByTitleContainsIgnoreCase(String searchString);
     List<Post> findAllByCategoryAndTitleContainsIgnoreCase(String categoryName, String searchString);
+    List<Post> findAllByAuthor(User username);
 }

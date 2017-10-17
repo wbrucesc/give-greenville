@@ -55,7 +55,7 @@
             <div class="col-lg-8" th:each="ask : ${asks}">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title post-title" th:text="${ask.title} + ' ' + '(' + ${ask.category} + ')'">Panel title</h3>
+                        <a class="panel-title post-title" th:text="${ask.title} + ' ' + '(' + ${ask.category} + ')'" th:href="@{'/detail/' + ${ask.id}}">Panel title</a>
                     </div>
                     <div class="panel-body">
                         <label class="control-label" for="desc">Description</label>

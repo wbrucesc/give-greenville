@@ -1,11 +1,12 @@
 package com.will.givegreenville.controllers;
 
-import com.will.givegreenville.models.Consideration;
-import com.will.givegreenville.models.Post;
-import com.will.givegreenville.models.User;
+import com.will.givegreenville.interfaces.GeoCode;
+import com.will.givegreenville.models.*;
 import com.will.givegreenville.repositories.ConsiderationRepository;
 import com.will.givegreenville.repositories.PostRepository;
 import com.will.givegreenville.repositories.UserRepository;
+import feign.Feign;
+import feign.gson.GsonDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -173,6 +174,20 @@ public class HomeController {
         Post targetPost = postRepo.findOne(postId);
         model.addAttribute("post", targetPost);
         model.addAttribute("considerations", targetPost.getConsiderations());
+
+        Key geokey = new Key();
+        MapKey mapKey = new MapKey();
+        GeoCode geoCode = Feign.builder()
+                            .decoder(new GsonDecoder())
+                            .target(GeoCode.class, "https://maps.googleapis.com");
+
+        // Reverse geocoding zip code from a post to get latitude and longitude to plug into static map url
+
+        GeoCodeResults geoCodeResults = geoCode.geoCodeResults(targetPost.getLocation(), geokey.getGEO_KEY());
+        double postLat = geoCodeResults.getResults().get(0).getGeometry().getLocation().getLat();
+        double postLng = geoCodeResults.getResults().get(0).getGeometry().getLocation().getLng();
+        String locationUrl = "https://maps.googleapis.com/maps/api/staticmap?zoom=12&size=400x400&maptype=roadmap&markers=color:green%7C" + postLat + "," + postLng + "&key=" + mapKey;
+        model.addAttribute("map", locationUrl);
         return "detail";
     }
 
@@ -206,6 +221,15 @@ public class HomeController {
                                     @RequestParam("flashSearch") String searchString) {
         model.addAttribute("flashes", postRepo.findAllByCategoryAndTitleContainsIgnoreCase("Flash Give", searchString));
         return "flashGive";
+    }
+
+    @RequestMapping("/myPosts")
+    public String myPostsPage(Model model,
+                              Principal principal) {
+        User me = userRepo.findByUsername(principal.getName());
+        System.out.println(me);
+        model.addAttribute("myPosts", postRepo.findAllByAuthor(me));
+        return "myPosts";
     }
 
 

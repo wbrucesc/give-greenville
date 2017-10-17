@@ -26,6 +26,7 @@
                     <li><a href="/flash">Give Today</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/myPosts">MY POSTS</a></li>
                     <li><a href="/about">ABOUT</a></li>
                     <li>
                         <form class="pull-right" action="/logout" method="POST">
@@ -72,7 +73,7 @@
                 <div class="col-lg-8" th:each="post: ${posts}">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h2 class="panel-title post-title" th:text="${post.title} + ' ' + '(' + ${post.category} + ')'"></h2>
+                            <a class="panel-title post-title" th:text="${post.title} + ' ' + '(' + ${post.category} + ')'" th:href="@{'/detail/' + ${post.id}}"></a>
                                 <!--<a class="btn btn-danger btn-sm pull-right" href="#">Delete</a>-->
                         </div>
 
