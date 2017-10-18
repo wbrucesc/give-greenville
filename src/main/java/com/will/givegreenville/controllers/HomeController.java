@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 @Controller
 public class HomeController {
@@ -31,7 +33,8 @@ public class HomeController {
     // home page lists recent posts in order of date created (newest to oldest)
     @RequestMapping("/")
     public String index(Model model) {
-        model.addAttribute("posts", postRepo.OrderByCreatedDesc());
+        model.addAttribute("posts", postRepo.findAllByActiveIsTrueOrderByCreatedDesc());
+        model.addAttribute("inactives", postRepo.findAllByActiveIsFalseOrderByCreatedDesc());
         return "index";
     }
 
@@ -170,10 +173,20 @@ public class HomeController {
     // POST DETAIL page LISTS post info and ALL CONSIDERATIONS for that post
     @RequestMapping("/detail/{postId}")
     public String detail(Model model,
-                         @PathVariable("postId") long postId) {
+                         @PathVariable("postId") long postId,
+                         Principal principal) {
         Post targetPost = postRepo.findOne(postId);
         model.addAttribute("post", targetPost);
         model.addAttribute("considerations", targetPost.getConsiderations());
+        User me = userRepo.findByUsername(principal.getName());
+        model.addAttribute("user", me);
+        System.out.println("Author is: " + targetPost.getAuthor());
+
+//        List<Consideration> considerations = targetPost.getConsiderations();
+//        Random rand = new Random();
+//        Consideration randomConsideration = considerations.get(rand.nextInt(considerations.size()));
+//        User recipient = randomConsideration.getUser();
+//        System.out.println(recipient);
 
         Key geokey = new Key();
         MapKey mapKey = new MapKey();
@@ -186,8 +199,15 @@ public class HomeController {
         GeoCodeResults geoCodeResults = geoCode.geoCodeResults(targetPost.getLocation(), geokey.getGEO_KEY());
         double postLat = geoCodeResults.getResults().get(0).getGeometry().getLocation().getLat();
         double postLng = geoCodeResults.getResults().get(0).getGeometry().getLocation().getLng();
+//        String city = geoCodeResults.getResults().get(0).getAddressComponents();
+        System.out.println(geoCodeResults.getResults().get(0).getFormatted_address());
+        String address = geoCodeResults.getResults().get(0).getFormatted_address();
+        model.addAttribute("formattedAddress", address);
+
+
         String locationUrl = "https://maps.googleapis.com/maps/api/staticmap?zoom=12&size=400x400&maptype=roadmap&markers=color:green%7C" + postLat + "," + postLng + "&key=" + mapKey;
         model.addAttribute("map", locationUrl);
+//        model.addAttribute("chosen", recipient);
         return "detail";
     }
 
@@ -223,14 +243,56 @@ public class HomeController {
         return "flashGive";
     }
 
+    // page that lists all posts created by logged in user
     @RequestMapping("/myPosts")
     public String myPostsPage(Model model,
                               Principal principal) {
         User me = userRepo.findByUsername(principal.getName());
-        System.out.println(me);
-        model.addAttribute("myPosts", postRepo.findAllByAuthor(me));
+        model.addAttribute("myPosts", postRepo.findAllByAuthorOrderByCreatedDesc(me));
         return "myPosts";
     }
 
+    // takes you to edit form for selected post from myPosts page
+    @RequestMapping("/edit/post/{id}")
+    public String editForm(Model model,
+                           @PathVariable("id") long id,
+                           Principal principal) {
+        User me = userRepo.findByUsername(principal.getName());
+        Post myPost = postRepo.findOne(id);
+        if (myPost.getAuthor() == me && myPost.isActive() == true) {
+            model.addAttribute("post", myPost);
+            return "update";
+        }
+        return "redirect:/";
+    }
+
+    // updates post
+    @RequestMapping(value = "/edit/post/{id}", method = RequestMethod.POST)
+    public String updatePost(@ModelAttribute Post post,
+                             Principal principal) {
+        User me = userRepo.findByUsername(principal.getName());
+        post.setAuthor(me);
+        post.setCreated(new Date());
+        postRepo.save(post);
+        return "redirect:/myPosts";
+    }
+
+    // takes you to delete confirmation page for selected post
+    @RequestMapping("/delete/post/{id}")
+    public String postDeleteConfirm(Model model,
+                                    @PathVariable("id") long id) {
+        Post postToDelete = postRepo.findOne(id);
+        model.addAttribute("post", postToDelete);
+        return "confirmDelete";
+    }
+
+    // disables post
+    @RequestMapping(value = "/delete/post/{id}", method = RequestMethod.POST)
+    public String deletePost(@PathVariable("id") long id) {
+        Post postToDelete = postRepo.findOne(id);
+        postToDelete.setActive(false);
+        postRepo.save(postToDelete);
+        return "redirect:/myPosts";
+    }
 
 }

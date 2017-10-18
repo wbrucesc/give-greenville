@@ -59,7 +59,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <a class="panel-title post-title" th:text="${post.title} + ' ' + '(' + ${post.category} + ')'" th:href="@{'/detail/' + ${post.id}}"></a>
-                        <!--<a class="btn btn-danger btn-sm pull-right" href="#">Delete</a>-->
+                        <a class="btn btn-danger btn-sm pull-right" th:if="${post.isActive() == true}" th:href="@{'/delete/post/' + ${post.id}}">Delete Post</a>
                     </div>
 
                     <div class="panel-body">
@@ -74,9 +74,9 @@
                         <br/>
                         <span th:text="${post.created}"></span>
                         <hr/>
-                        <a class="btn btn-primary btn-sm" th:href="@{'/detail/' + ${post.id}}">Considerations <span class="badge" th:text="${post.considerations.size()}"></span></a>
-
-                        <a class="btn btn-default btn-sm pull-right" th:href="@{'/consider/' + ${post.id}}">Consider Me</a>
+                        <a  class="btn btn-primary btn-sm" th:href="@{'/detail/' + ${post.id}}">Considerations <span class="badge" th:text="${post.considerations.size()}"></span></a>
+                        <a th:if="${post.isActive() == true}" class="btn btn-default btn-sm pull-right" th:href="@{'/edit/post/' + ${post.id}}">Edit Post</a>
+                        <a th:if="${post.isActive() == true}" class="btn btn-warning btn-sm" th:href="@{'/choose/' + ${post.id}}">Choose Random Recipient</a>
                     </div>
                 </div>
             </div>

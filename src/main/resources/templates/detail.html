@@ -46,17 +46,19 @@
                         <div th:text="${post.description}" id="desc"></div>
                         <hr/>
                         <label class="control-label" for="loc">Location</label>
-                        <div th:text="${post.location}" id="loc"></div>
-                        <div th:text="${post.author.username}"></div>
+                        <div th:text="${formattedAddress}" id="loc"></div>
+                        <label class="control-label" for="poster">Poster: </label>
+                        <span class="inline" th:text="${post.author.username}" id="poster"></span>
                         <hr/>
-                        <label class="control-label" for="list">Considerations</label>
+                        <label th:unless="${post.considerations.size() > 0}" class="control-label" for="list">No Considerations Yet</label>
+                        <label th:if="${post.considerations.size() > 0}" for="list">Considerations</label>
                         <ul id="list" class="list-unstyled well well-sm" th:each="consideration: ${considerations}">
-                            <p th:text="${consideration.user.username} + ': ' + ${consideration.comment}"></p>
+                            <li th:text="${consideration.user.username} + ': ' + ${consideration.comment}"></li>
+                            <span class="inline btn btn-warning btn-xs" th:if="${post.isActive() == true and post.getAuthor().getId() == user.getId()}">Choose</span>
                         </ul>
 
 
-
-                        <a class="btn btn-default btn-sm pull-right" th:href="@{'/consider/' + ${post.id}}">Consider Me</a>
+                        <a th:if="${post.getAuthor().getId() != user.getId()}" class="btn btn-default btn-sm pull-right" th:href="@{'/consider/' + ${post.id}}">Consider Me</a>
                     </div>
                 </div>
             </div>
@@ -66,6 +68,11 @@
                     <img th:src="${map}" alt="location on map"/>
                 </div>
             </div>
+
+            <!--<div class="container well-lg">-->
+                <!--<h1>Random recipient: </h1>-->
+                <!--<h2 th:text="${chosen}"></h2>-->
+            <!--</div>-->
     </div>
 
 

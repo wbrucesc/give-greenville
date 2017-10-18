@@ -25,6 +25,8 @@ public class Post {
     private String location;
     private String category;
 
+    private boolean active;
+
     public Post() {
     }
 
@@ -33,7 +35,7 @@ public class Post {
     private User author;
 
     @OneToMany(mappedBy = "post",
-    cascade = CascadeType.ALL, orphanRemoval = true)
+    cascade = CascadeType.ALL)
     private List<Consideration> considerations;
 
     public List<Consideration> getConsiderations() {
@@ -106,5 +108,13 @@ public class Post {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
