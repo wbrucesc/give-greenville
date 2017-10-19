@@ -1,8 +1,10 @@
 package com.will.givegreenville.models;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.time.DateTimeException;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +29,9 @@ public class Post {
 
     private boolean active;
 
+    @ColumnDefault(value = "false")
+    private boolean completed;
+
     public Post() {
     }
 
@@ -37,6 +42,10 @@ public class Post {
     @OneToMany(mappedBy = "post",
     cascade = CascadeType.ALL)
     private List<Consideration> considerations;
+
+    @OneToOne
+    @JoinColumn(name = "recipient")
+    private User recipient;
 
     public List<Consideration> getConsiderations() {
         return considerations;
@@ -86,14 +95,6 @@ public class Post {
         this.category = category;
     }
 
-//    public Date getDate() {
-//        return date;
-//    }
-//
-//    public void setDate(Date date) {
-//        this.date = date;
-//    }
-
     public User getAuthor() {
         return author;
     }
@@ -116,5 +117,21 @@ public class Post {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public User getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(User recipient) {
+        this.recipient = recipient;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }

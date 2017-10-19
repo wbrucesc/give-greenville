@@ -76,7 +76,6 @@
                         <hr/>
                         <a  class="btn btn-primary btn-sm" th:href="@{'/detail/' + ${post.id}}">Considerations <span class="badge" th:text="${post.considerations.size()}"></span></a>
                         <a th:if="${post.isActive() == true}" class="btn btn-default btn-sm pull-right" th:href="@{'/edit/post/' + ${post.id}}">Edit Post</a>
-                        <a th:if="${post.isActive() == true}" class="btn btn-warning btn-sm" th:href="@{'/choose/' + ${post.id}}">Choose Random Recipient</a>
                     </div>
                 </div>
             </div>

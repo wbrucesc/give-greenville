@@ -32,7 +32,16 @@ public class HomeController {
 
     // home page lists recent posts in order of date created (newest to oldest)
     @RequestMapping("/")
-    public String index(Model model) {
+    public String index(Model model,
+                        Principal principal) {
+
+        if (principal != null){
+            User me = userRepo.findByUsername(principal.getName());
+            model.addAttribute("user", me);
+            model.addAttribute("posts", postRepo.findAllByActiveIsTrueOrderByCreatedDesc());
+            model.addAttribute("inactives", postRepo.findAllByActiveIsFalseOrderByCreatedDesc());
+            return "index";
+        }
         model.addAttribute("posts", postRepo.findAllByActiveIsTrueOrderByCreatedDesc());
         model.addAttribute("inactives", postRepo.findAllByActiveIsFalseOrderByCreatedDesc());
         return "index";
@@ -182,12 +191,6 @@ public class HomeController {
         model.addAttribute("user", me);
         System.out.println("Author is: " + targetPost.getAuthor());
 
-//        List<Consideration> considerations = targetPost.getConsiderations();
-//        Random rand = new Random();
-//        Consideration randomConsideration = considerations.get(rand.nextInt(considerations.size()));
-//        User recipient = randomConsideration.getUser();
-//        System.out.println(recipient);
-
         Key geokey = new Key();
         MapKey mapKey = new MapKey();
         GeoCode geoCode = Feign.builder()
@@ -207,7 +210,7 @@ public class HomeController {
 
         String locationUrl = "https://maps.googleapis.com/maps/api/staticmap?zoom=12&size=400x400&maptype=roadmap&markers=color:green%7C" + postLat + "," + postLng + "&key=" + mapKey;
         model.addAttribute("map", locationUrl);
-//        model.addAttribute("chosen", recipient);
+        model.addAttribute("chosen", targetPost.getRecipient());
         return "detail";
     }
 
@@ -293,6 +296,50 @@ public class HomeController {
         postToDelete.setActive(false);
         postRepo.save(postToDelete);
         return "redirect:/myPosts";
+    }
+
+    // to grab random recipient/user from list of considerations on a post
+    @RequestMapping(value = "/choose/post/{id}")
+    public String chooseRecipient(@PathVariable("id") long id,
+                                  Model model,
+                                  @ModelAttribute Post post) {
+
+        Post targetPost = postRepo.findOne(id);
+
+        List<Consideration> considerations = targetPost.getConsiderations();
+        System.out.println("Considerations: " + considerations);
+
+        Random rand = new Random();
+        Consideration randomConsideration = considerations.get(rand.nextInt(considerations.size()));
+        User recipient = randomConsideration.getUser();
+
+        System.out.println(recipient);
+
+        targetPost.setActive(false);
+        targetPost.setRecipient(recipient);
+        postRepo.save(targetPost);
+        model.addAttribute("chosen", recipient);
+
+        return "redirect:/detail/{id}";
+    }
+
+    // choose specific user instead of random
+    @RequestMapping("/pick/{postId}/{userId}")
+    public String chooseSpecific(Model model,
+                                 @PathVariable("postId") long postId,
+                                 @PathVariable("userId") long userId) {
+
+        Post targetPost = postRepo.findOne(postId);
+        System.out.println(postId);
+        User recipient = userRepo.findOne(userId);
+        System.out.println(userId);
+
+        targetPost.setRecipient(recipient);
+        targetPost.setActive(false);
+        postRepo.save(targetPost);
+        model.addAttribute("chosen", recipient);
+
+        return "redirect:/detail/{postId}";
     }
 
 }
