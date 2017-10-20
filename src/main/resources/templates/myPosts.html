@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <title>User Posts</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"/>
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-h21C2fcDk/eFsW9sC9h0dhokq5pDinLNklTKoxIZRUn3+hvmgQSffLLQ4G4l2eEr" crossorigin="anonymous"/>
 </head>
 <body>
@@ -16,7 +17,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Give Greenville</a>
+                <a class="navbar-brand" href="/"><i class="fa fa-gift fa-lg"></i>  Give Greenville</a>
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -61,7 +62,10 @@
             <div class="col-lg-8 col-lg-offset-2" th:each="post: ${myPosts}">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a class="panel-title post-title" th:text="${post.title} + ' ' + '(' + ${post.category} + ')'" th:href="@{'/detail/' + ${post.id}}"></a>
+                        <a class="panel-title post-title" th:text="${post.title}" th:href="@{'/detail/' + ${post.id}}"></a>
+                        <i th:if="${post.getCategory().equals('Ask')}" class="fa fa-users fa-lg pull-left"></i>
+                        <i th:if="${post.getCategory().equals('Give')}" class="fa fa-gift fa-lg pull-left"></i>
+                        <i th:if="${post.getCategory().equals('Flash Give')}" class="fa fa-bolt fa-lg pull-left"></i>
                         <a class="btn btn-danger btn-sm pull-right" th:if="${post.isActive() == true}" th:href="@{'/delete/post/' + ${post.id}}">Delete Post</a>
                     </div>
 
@@ -86,7 +90,11 @@
             <div class="col-lg-8 col-lg-offset-2 well" th:each="post: ${completed}">
                 <div class="panel panel-success">
                     <div class="panel-heading">
-                        <a class="panel-title post-title" th:text="${post.title} + ' ' + '(' + ${post.category} + ')'" th:href="@{'/detail/' + ${post.id}}"></a>
+                        <a class="panel-title post-title" th:text="${post.title}" th:href="@{'/detail/' + ${post.id}}"></a>
+                        <i th:if="${post.getCategory().equals('Ask')}" class="fa fa-users fa-lg pull-right"></i>
+                        <i th:if="${post.getCategory().equals('Give')}" class="fa fa-gift fa-lg pull-right"></i>
+                        <i th:if="${post.getCategory().equals('Flash Give')}" class="fa fa-bolt fa-lg pull-right"></i>
+                        <i class="fa fa-check-circle-o fa-lg pull-right"></i>
                     </div>
 
                     <div class="panel-body">

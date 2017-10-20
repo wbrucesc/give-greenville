@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Post Detail</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"/>
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-h21C2fcDk/eFsW9sC9h0dhokq5pDinLNklTKoxIZRUn3+hvmgQSffLLQ4G4l2eEr" crossorigin="anonymous"/>
 </head>
 <body>
@@ -43,7 +44,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Give Greenville</a>
+                <a class="navbar-brand" href="/"><i class="fa fa-gift fa-lg"></i>  Give Greenville</a>
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -73,7 +74,10 @@
             <div class="col-lg-8" th:object="${targetPost}">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title" th:text="${post.title} + ' ' + '(' + ${post.category} + ')'" style="font-weight: 500">Panel title</h3>
+                        <a class="panel-title" th:text="${post.title}" th:disabled="true" style="text-decoration: none">Panel title</a>
+                        <i th:if="${post.getCategory().equals('Ask')}" class="fa fa-users fa-lg pull-right inline"></i>
+                        <i th:if="${post.getCategory().equals('Give')}" class="fa fa-gift fa-lg pull-right inline"></i>
+                        <i th:if="${post.getCategory().equals('Flash Give')}" class="fa fa-bolt fa-lg pull-right inline"></i>
                     </div>
                     <div class="panel-body">
                         <label class="control-label" for="desc">Description</label>
