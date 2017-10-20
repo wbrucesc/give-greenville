@@ -39,11 +39,11 @@ public class HomeController {
             User me = userRepo.findByUsername(principal.getName());
             model.addAttribute("user", me);
             model.addAttribute("posts", postRepo.findAllByActiveIsTrueOrderByCreatedDesc());
-            model.addAttribute("inactives", postRepo.findAllByActiveIsFalseOrderByCreatedDesc());
+            model.addAttribute("completed", postRepo.findAllByCompletedIsTrueOrderByCreatedDesc());
             return "index";
         }
         model.addAttribute("posts", postRepo.findAllByActiveIsTrueOrderByCreatedDesc());
-        model.addAttribute("inactives", postRepo.findAllByActiveIsFalseOrderByCreatedDesc());
+        model.addAttribute("completed", postRepo.findAllByCompletedIsTrueOrderByCreatedDesc());
         return "index";
     }
 
@@ -88,6 +88,7 @@ public class HomeController {
         User me = userRepo.findByUsername(principal.getName());
         post.setAuthor(me);
         post.setCreated(new Date());
+        post.setActive(true);
         postRepo.save(post);
         return "redirect:/";
     }
@@ -202,8 +203,7 @@ public class HomeController {
         GeoCodeResults geoCodeResults = geoCode.geoCodeResults(targetPost.getLocation(), geokey.getGEO_KEY());
         double postLat = geoCodeResults.getResults().get(0).getGeometry().getLocation().getLat();
         double postLng = geoCodeResults.getResults().get(0).getGeometry().getLocation().getLng();
-//        String city = geoCodeResults.getResults().get(0).getAddressComponents();
-        System.out.println(geoCodeResults.getResults().get(0).getFormatted_address());
+
         String address = geoCodeResults.getResults().get(0).getFormatted_address();
         model.addAttribute("formattedAddress", address);
 
@@ -317,6 +317,7 @@ public class HomeController {
 
         targetPost.setActive(false);
         targetPost.setRecipient(recipient);
+        targetPost.setCompleted(true);
         postRepo.save(targetPost);
         model.addAttribute("chosen", recipient);
 
@@ -336,6 +337,7 @@ public class HomeController {
 
         targetPost.setRecipient(recipient);
         targetPost.setActive(false);
+        targetPost.setCompleted(true);
         postRepo.save(targetPost);
         model.addAttribute("chosen", recipient);
 

@@ -58,8 +58,7 @@
                         </ul>
 
 
-                        <a th:if="${post.getAuthor().getId() != user.getId()}" class="btn btn-default btn-sm pull-right" th:href="@{'/consider/' + ${post.id}}">Consider Me</a>
-                        <!--<a th:if="${post.checkIfUserAlreadyConsidered(post, user) == true and post.isActive() == true}" class="btn btn-default btn-sm pull-right" th:href="@{'/consider/' + ${post.id}}">Consider Me</a>-->
+                        <a th:if="${post.getAuthor().getId() != user.getId() and post.isActive() == true}" class="btn btn-default btn-sm pull-right" th:href="@{'/consider/' + ${post.id}}">Consider Me</a>
                         <a th:if="${post.isActive() == true and post.getAuthor().getId() == user.getId() and post.getConsiderations().size() > 1}" class="btn btn-warning btn-sm pull-right" th:href="@{'/choose/post/' + ${post.id}}">Choose Random Recipient</a>
                         <hr/>
                         <h4 th:if="${post.getCategory().equals('Ask') and post.getRecipient() != null}">Donor: </h4>

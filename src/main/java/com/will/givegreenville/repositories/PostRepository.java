@@ -17,4 +17,5 @@ public interface PostRepository extends CrudRepository<Post, Long> {
     List<Post> findAllByAuthorOrderByCreatedDesc(User username);
     List<Post> findAllByActiveIsTrueOrderByCreatedDesc();
     List<Post> findAllByActiveIsFalseOrderByCreatedDesc();
+    List<Post> findAllByCompletedIsTrueOrderByCreatedDesc();
 }

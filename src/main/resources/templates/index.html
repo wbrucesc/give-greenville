@@ -104,7 +104,7 @@
                 <br/>
 
 
-                <div class="col-lg-8 well" th:each="post: ${inactives}">
+                <div class="col-lg-8 well" th:each="post: ${completed}">
                     <div class="panel panel-success">
                         <div class="panel-heading">
                             <a class="panel-title post-title" th:text="${post.title} + ' ' + '(' + ${post.category} + ')'" th:href="@{'/detail/' + ${post.id}}"></a>
