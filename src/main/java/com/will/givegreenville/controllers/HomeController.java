@@ -30,7 +30,7 @@ public class HomeController {
     @Autowired
     private ConsiderationRepository considerRepo;
 
-    // home page lists recent posts in order of date created (newest to oldest)
+    // home page lists recent posts in order of date created (newest to oldest) ***
     @RequestMapping("/")
     public String index(Model model,
                         Principal principal) {
@@ -47,36 +47,70 @@ public class HomeController {
         return "index";
     }
 
-    // about page
+    // about page ***
     @RequestMapping("/about")
-    public String about() {
+    public String about(Model model,
+                        Principal principal) {
+        if (principal != null) {
+            User me = userRepo.findByUsername(principal.getName());
+            model.addAttribute("user", me);
+            return "about";
+        }
         return "about";
     }
 
-    // ask page lists all ASK posts
+    // ask page lists all ASK posts ***
     @RequestMapping("/ask")
-    public String askPage(Model model) {
+    public String askPage(Model model,
+                          Principal principal) {
+        if (principal != null) {
+            User me = userRepo.findByUsername(principal.getName());
+            model.addAttribute("user", me);
+            model.addAttribute("asks", postRepo.findAllByCategoryOrderByCreatedDesc("Ask"));
+            return "ask";
+        }
         model.addAttribute("asks", postRepo.findAllByCategoryOrderByCreatedDesc("Ask"));
         return "ask";
     }
 
-    // give page lists all posts with category of GIVE
+    // give page lists all posts with category of GIVE ***
     @RequestMapping("/give")
-    public String givePage(Model model) {
+    public String givePage(Model model,
+                           Principal principal) {
+        if (principal != null) {
+            User me = userRepo.findByUsername(principal.getName());
+            model.addAttribute("user", me);
+            model.addAttribute("gives", postRepo.findAllByCategoryOrderByCreatedDesc("Give"));
+            return "give";
+        }
         model.addAttribute("gives", postRepo.findAllByCategoryOrderByCreatedDesc("Give"));
         return "give";
     }
 
-    // flash give page lists ALL FLASH GIVE posts
+    // flash give page lists ALL FLASH GIVE posts ***
     @RequestMapping("/flash")
-    public String flashPage(Model model) {
+    public String flashPage(Model model,
+                            Principal principal) {
+        if (principal != null) {
+            User me = userRepo.findByUsername(principal.getName());
+            model.addAttribute("user", me);
+            model.addAttribute("flashes", postRepo.findAllByCategoryOrderByCreatedDesc("Flash Give"));
+            return "flashGive";
+        }
         model.addAttribute("flashes", postRepo.findAllByCategoryOrderByCreatedDesc("Flash Give"));
         return "flashGive";
     }
 
-    // takes you to CREATE GENERAL POST FORM
+    // takes you to CREATE GENERAL POST FORM ***
     @RequestMapping("/create")
-    public String createForm(Model model) {
+    public String createForm(Model model,
+                             Principal principal) {
+        if (principal != null) {
+            User me = userRepo.findByUsername(principal.getName());
+            model.addAttribute("user", me);
+            model.addAttribute("post", new Post());
+            return "create";
+        }
         model.addAttribute("post", new Post());
         return "create";
     }
@@ -93,9 +127,16 @@ public class HomeController {
         return "redirect:/";
     }
 
-    // takes you to create ASK POST FORM
+    // takes you to create ASK POST FORM ***
     @RequestMapping("/createAsk")
-    public String askForm(Model model) {
+    public String askForm(Model model,
+                          Principal principal) {
+        if (principal != null) {
+            User me = userRepo.findByUsername(principal.getName());
+            model.addAttribute("user", me);
+            model.addAttribute("post", new Post());
+            return "createAsk";
+        }
         model.addAttribute("post", new Post());
         return "createAsk";
     }
@@ -112,9 +153,16 @@ public class HomeController {
         return "redirect:/ask";
     }
 
-    // takes you to create GIVE POST FORM
+    // takes you to create GIVE POST FORM ***
     @RequestMapping("/createGive")
-    public String giveForm(Model model) {
+    public String giveForm(Model model,
+                           Principal principal) {
+        if (principal != null) {
+            User me = userRepo.findByUsername(principal.getName());
+            model.addAttribute("user", me);
+            model.addAttribute("post", new Post());
+            return "createGive";
+        }
         model.addAttribute("post", new Post());
         return "createGive";
     }
@@ -131,9 +179,16 @@ public class HomeController {
         return "redirect:/give";
     }
 
-    // takes you to create FLASH GIVE FORM
+    // takes you to create FLASH GIVE FORM ***
     @RequestMapping("/createFlash")
-    public String flashForm(Model model) {
+    public String flashForm(Model model,
+                            Principal principal) {
+        if (principal != null) {
+            User me = userRepo.findByUsername(principal.getName());
+            model.addAttribute("user", me);
+            model.addAttribute("post", new Post());
+            return "createFlash";
+        }
         model.addAttribute("post", new Post());
         return "createFlash";
     }
@@ -151,11 +206,19 @@ public class HomeController {
     }
 
 
-    // takes you to create a CONSIDERATION page
+    // takes you to create a CONSIDERATION page ***
     @RequestMapping("/consider/{postId}")
     public String considerForm(Model model,
                                @PathVariable("postId") long postId,
                                Principal principal) {
+
+        if (principal != null) {
+            User me = userRepo.findByUsername(principal.getName());
+            model.addAttribute("user", me);
+            model.addAttribute("consideration", new Consideration());
+            model.addAttribute("postId", postId);
+            return "consider";
+        }
         model.addAttribute("consideration", new Consideration());
         model.addAttribute("postId", postId);
         return "consider";
@@ -180,7 +243,7 @@ public class HomeController {
         return "redirect:/";
     }
 
-    // POST DETAIL page LISTS post info and ALL CONSIDERATIONS for that post
+    // POST DETAIL page LISTS post info and ALL CONSIDERATIONS for that post ***
     @RequestMapping("/detail/{postId}")
     public String detail(Model model,
                          @PathVariable("postId") long postId,
@@ -190,7 +253,7 @@ public class HomeController {
         model.addAttribute("considerations", targetPost.getConsiderations());
         User me = userRepo.findByUsername(principal.getName());
         model.addAttribute("user", me);
-        System.out.println("Author is: " + targetPost.getAuthor());
+//        System.out.println("Author is: " + targetPost.getAuthor());
 
         Key geokey = new Key();
         MapKey mapKey = new MapKey();
@@ -246,27 +309,34 @@ public class HomeController {
         return "flashGive";
     }
 
-    // page that lists all posts created by logged in user
+    // page that lists all posts created by logged in user ***
     @RequestMapping("/myPosts")
     public String myPostsPage(Model model,
                               Principal principal) {
         User me = userRepo.findByUsername(principal.getName());
-        model.addAttribute("myPosts", postRepo.findAllByAuthorOrderByCreatedDesc(me));
+        model.addAttribute("user", me);
+        model.addAttribute("myPosts", postRepo.findAllByAuthorAndActiveIsTrueOrderByConsiderationsDesc(me));
+        model.addAttribute("completed", postRepo.findAllByAuthorAndCompletedIsTrueOrderByCreatedDesc(me));
         return "myPosts";
     }
 
-    // takes you to edit form for selected post from myPosts page
+    // takes you to edit form for selected post from myPosts page ***
     @RequestMapping("/edit/post/{id}")
     public String editForm(Model model,
                            @PathVariable("id") long id,
                            Principal principal) {
-        User me = userRepo.findByUsername(principal.getName());
-        Post myPost = postRepo.findOne(id);
-        if (myPost.getAuthor() == me && myPost.isActive() == true) {
-            model.addAttribute("post", myPost);
-            return "update";
+        if (principal != null) {
+            User me = userRepo.findByUsername(principal.getName());
+            model.addAttribute("user", me);
+            Post myPost = postRepo.findOne(id);
+            if (myPost.getAuthor() == me && myPost.isActive() == true) {
+                model.addAttribute("post", myPost);
+                return "update";
+            }
+            return "redirect:/";
         }
         return "redirect:/";
+
     }
 
     // updates post
@@ -280,10 +350,14 @@ public class HomeController {
         return "redirect:/myPosts";
     }
 
-    // takes you to delete confirmation page for selected post
+    // takes you to delete confirmation page for selected post ***
     @RequestMapping("/delete/post/{id}")
     public String postDeleteConfirm(Model model,
-                                    @PathVariable("id") long id) {
+                                    @PathVariable("id") long id,
+                                    Principal principal) {
+
+        User me = userRepo.findByUsername(principal.getName());
+        model.addAttribute("user", me);
         Post postToDelete = postRepo.findOne(id);
         model.addAttribute("post", postToDelete);
         return "confirmDelete";
@@ -307,13 +381,13 @@ public class HomeController {
         Post targetPost = postRepo.findOne(id);
 
         List<Consideration> considerations = targetPost.getConsiderations();
-        System.out.println("Considerations: " + considerations);
+//        System.out.println("Considerations: " + considerations);
 
         Random rand = new Random();
         Consideration randomConsideration = considerations.get(rand.nextInt(considerations.size()));
         User recipient = randomConsideration.getUser();
 
-        System.out.println(recipient);
+//        System.out.println(recipient);
 
         targetPost.setActive(false);
         targetPost.setRecipient(recipient);
@@ -331,9 +405,9 @@ public class HomeController {
                                  @PathVariable("userId") long userId) {
 
         Post targetPost = postRepo.findOne(postId);
-        System.out.println(postId);
+//        System.out.println(postId);
         User recipient = userRepo.findOne(userId);
-        System.out.println(userId);
+//        System.out.println(userId);
 
         targetPost.setRecipient(recipient);
         targetPost.setActive(false);
