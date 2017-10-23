@@ -5,12 +5,14 @@ import com.will.givegreenville.models.*;
 import com.will.givegreenville.repositories.ConsiderationRepository;
 import com.will.givegreenville.repositories.PostRepository;
 import com.will.givegreenville.repositories.UserRepository;
+import com.will.givegreenville.storage.StorageService;
 import feign.Feign;
 import feign.gson.GsonDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -29,6 +31,10 @@ public class HomeController {
 
     @Autowired
     private ConsiderationRepository considerRepo;
+
+    @Autowired
+    private StorageService storageService;
+
 
     // home page lists recent posts in order of date created (newest to oldest) ***
     @RequestMapping("/")
@@ -118,11 +124,15 @@ public class HomeController {
     // creates new GENERAL (ask, give, flash give) post
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String createPost(@ModelAttribute Post post,
+                             @RequestParam("file") MultipartFile file,
                              Principal principal) {
         User me = userRepo.findByUsername(principal.getName());
+        storageService.store(file);
+        String fileName = file.getOriginalFilename();
         post.setAuthor(me);
         post.setCreated(new Date());
         post.setActive(true);
+        post.setImagePath(fileName);
         postRepo.save(post);
         return "redirect:/";
     }

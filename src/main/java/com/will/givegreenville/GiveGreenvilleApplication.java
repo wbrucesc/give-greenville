@@ -16,11 +16,11 @@ public class GiveGreenvilleApplication {
 		SpringApplication.run(GiveGreenvilleApplication.class, args);
 	}
 
-	@Bean
-	CommandLineRunner init(StorageService storageService) {
-		return (args) -> {
-			storageService.deleteAll();
-			storageService.init();
-		};
-	}
+//	@Bean
+//	CommandLineRunner init(StorageService storageService) {
+//		return (args) -> {
+////			storageService.deleteAll();
+//			storageService.init();
+//		};
+//	}
 }
