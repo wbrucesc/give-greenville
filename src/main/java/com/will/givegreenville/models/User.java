@@ -20,6 +20,7 @@ public class User implements UserDetails {
     private String username;
     private String first;
     private String last;
+    private String email;
     private String password;
     private boolean active;
 
@@ -117,5 +118,13 @@ public class User implements UserDetails {
     @Override
     public String toString() {
         return username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

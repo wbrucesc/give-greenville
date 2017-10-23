@@ -5,6 +5,7 @@
     <title>Home</title>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"/>
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-h21C2fcDk/eFsW9sC9h0dhokq5pDinLNklTKoxIZRUn3+hvmgQSffLLQ4G4l2eEr" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="/assets/css/app.css"/>
 </head>
 <body>
 
@@ -80,7 +81,6 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <a class="panel-title post-title" th:text="${post.title}" th:href="@{'/detail/' + ${post.id}}"></a>
-                                <!--<a class="btn btn-danger btn-sm pull-right" href="#">Delete</a>-->
                             <i th:if="${post.getCategory().equals('Ask')}" class="fa fa-users fa-lg pull-right"></i>
                             <i th:if="${post.getCategory().equals('Give')}" class="fa fa-gift fa-lg pull-right"></i>
                             <i th:if="${post.getCategory().equals('Flash Give')}" class="fa fa-bolt fa-lg pull-right"></i>
@@ -95,9 +95,9 @@
                                 <label class="control-label" for="description">Description</label>
                                 <div th:text="${post.description}" id="description"></div>
                                 <hr/>
-                                <!--<label class="control-label" for="loc">Location</label>-->
-                                <!--<div th:text="${post.location}" id="loc"></div>-->
-                                <!--<br/>-->
+                                <label class="control-label" for="loc">Location</label>
+                                <div th:text="${post.location}" id="loc"></div>
+                                <br/>
                                 <label class="control-label" for="poster">Poster:</label>
                                 <span class="inline" th:text="${post.author.username}" id="poster"></span>
                                 <br/>
@@ -109,10 +109,6 @@
                             </div>
 
                         </div>
-
-                        <hr/>
-
-
                     </div>
                 </div>
 

@@ -8,6 +8,8 @@ import com.will.givegreenville.repositories.UserRepository;
 import com.will.givegreenville.storage.StorageService;
 import feign.Feign;
 import feign.gson.GsonDecoder;
+import net.sargue.mailgun.Configuration;
+import net.sargue.mailgun.Mail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -128,11 +130,10 @@ public class HomeController {
                              Principal principal) {
         User me = userRepo.findByUsername(principal.getName());
         storageService.store(file);
-        String fileName = file.getOriginalFilename();
+
         post.setAuthor(me);
         post.setCreated(new Date());
         post.setActive(true);
-        post.setImagePath(fileName);
         postRepo.save(post);
         return "redirect:/";
     }
@@ -258,18 +259,44 @@ public class HomeController {
     public String detail(Model model,
                          @PathVariable("postId") long postId,
                          Principal principal) {
+        if (principal != null) {
+            Post targetPost = postRepo.findOne(postId);
+            model.addAttribute("post", targetPost);
+            model.addAttribute("considerations", targetPost.getConsiderations());
+            User me = userRepo.findByUsername(principal.getName());
+            model.addAttribute("user", me);
+//        System.out.println("Author is: " + targetPost.getAuthor());
+
+            Key geokey = new Key();
+            MapKey mapKey = new MapKey();
+            GeoCode geoCode = Feign.builder()
+                    .decoder(new GsonDecoder())
+                    .target(GeoCode.class, "https://maps.googleapis.com");
+
+            // Reverse geocoding zip code from a post to get latitude and longitude to plug into static map url
+
+            GeoCodeResults geoCodeResults = geoCode.geoCodeResults(targetPost.getLocation(), geokey.getGEO_KEY());
+            double postLat = geoCodeResults.getResults().get(0).getGeometry().getLocation().getLat();
+            double postLng = geoCodeResults.getResults().get(0).getGeometry().getLocation().getLng();
+
+            String address = geoCodeResults.getResults().get(0).getFormatted_address();
+            model.addAttribute("formattedAddress", address);
+
+
+            String locationUrl = "https://maps.googleapis.com/maps/api/staticmap?zoom=12&size=400x400&maptype=roadmap&markers=color:green%7C" + postLat + "," + postLng + "&key=" + mapKey;
+            model.addAttribute("map", locationUrl);
+            model.addAttribute("chosen", targetPost.getRecipient());
+            return "detail";
+        }
         Post targetPost = postRepo.findOne(postId);
         model.addAttribute("post", targetPost);
         model.addAttribute("considerations", targetPost.getConsiderations());
-        User me = userRepo.findByUsername(principal.getName());
-        model.addAttribute("user", me);
-//        System.out.println("Author is: " + targetPost.getAuthor());
 
         Key geokey = new Key();
         MapKey mapKey = new MapKey();
         GeoCode geoCode = Feign.builder()
-                            .decoder(new GsonDecoder())
-                            .target(GeoCode.class, "https://maps.googleapis.com");
+                .decoder(new GsonDecoder())
+                .target(GeoCode.class, "https://maps.googleapis.com");
 
         // Reverse geocoding zip code from a post to get latitude and longitude to plug into static map url
 
@@ -404,6 +431,7 @@ public class HomeController {
         targetPost.setCompleted(true);
         postRepo.save(targetPost);
         model.addAttribute("chosen", recipient);
+        SendSimpleMessage();
 
         return "redirect:/detail/{id}";
     }
@@ -428,4 +456,18 @@ public class HomeController {
         return "redirect:/detail/{postId}";
     }
 
+
+    public static void SendSimpleMessage() {
+        Configuration configuration = new Configuration()
+                .domain("mg.willbruce.fun")
+                .apiKey(System.getenv("mgkey"))
+                .from("Test Account", "blank@example.com");
+
+        Mail.using(configuration)
+                .to("user@example.com")
+                .subject("This is the subject")
+                .text("Hello world!")
+                .build()
+                .send();
+    }
 }

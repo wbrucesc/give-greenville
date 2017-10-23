@@ -5,7 +5,7 @@ import feign.Param;
 import feign.RequestLine;
 
 public interface GeoCode {
-    @RequestLine("GET /maps/api/geocode/json?address={zipcode}&key={key}")
-    GeoCodeResults geoCodeResults(@Param("zipcode") String zipcode, @Param("key") String key);
+    @RequestLine("GET /maps/api/geocode/json?address={location}&key={key}")
+    GeoCodeResults geoCodeResults(@Param("location") String location, @Param("key") String key);
 
 }

@@ -86,7 +86,7 @@
                             <hr/>
                             <a class="btn btn-primary btn-sm" th:href="@{'/detail/' + ${flash.id}}">Considerations <span class="badge" th:text="${flash.considerations.size()}"></span></a>
 
-                            <a class="btn btn-default btn-sm pull-right" th:href="@{'/consider/' + ${flash.id}}">Consider Me</a>
+                            <a class="btn btn-default btn-sm pull-right" th:if="${user != null and flash.getAuthor().getId() != user.getId()}" th:href="@{'/consider/' + ${flash.id}}">Consider Me</a>
                         </div>
 
                     </div>

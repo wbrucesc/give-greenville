@@ -25,14 +25,14 @@ public class UserController {
     private RoleRepository roleRepo;
 
     // signup page
-    @RequestMapping(name = "/signup", method = RequestMethod.GET)
+    @RequestMapping(value = "/signup", method = RequestMethod.GET)
     public String signupForm(Model model) {
         model.addAttribute("user", new User());
         return "signup";
     }
 
     // creates new user
-    @RequestMapping(name = "/signup", method = RequestMethod.POST)
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String signupForm(@ModelAttribute User user) {
 
         Role userRole = roleRepo.findByName("ROLE_USER");
