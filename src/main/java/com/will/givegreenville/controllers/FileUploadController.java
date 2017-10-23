@@ -1,6 +1,8 @@
 package com.will.givegreenville.controllers;
 
 
+import com.will.givegreenville.models.Post;
+import com.will.givegreenville.repositories.PostRepository;
 import com.will.givegreenville.storage.StorageFileNotFoundException;
 import com.will.givegreenville.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ import java.util.stream.Collectors;
 
 @Controller
 public class FileUploadController {
+
+    @Autowired
+    private PostRepository postRepo;
 
     private final StorageService storageService;
 
@@ -49,6 +54,8 @@ public class FileUploadController {
     @PostMapping("/upload")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes) {
+        String fileName = file.getOriginalFilename();
+        System.out.println(fileName);
         storageService.store(file);
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");

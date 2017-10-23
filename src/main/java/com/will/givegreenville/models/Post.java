@@ -32,6 +32,9 @@ public class Post {
     @ColumnDefault(value = "false")
     private boolean completed;
 
+    @Column(name = "image_path")
+    private String imagePath;
+
     public Post() {
     }
 
@@ -133,5 +136,13 @@ public class Post {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

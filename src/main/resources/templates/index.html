@@ -55,6 +55,10 @@
         </div>
     </div>
 
+    <!--<ul th:each="post : ${posts}">-->
+        <!--<img th:src="@{'/files/' + ${post.imagePath}}"/>-->
+    <!--</ul>-->
+
     <div class="container">
         <div class="container-fluid well">
             <h1 class="pull-left">Recent Posts</h1>
@@ -74,8 +78,6 @@
                     </form>
 
 
-
-
                 </div>
                 <div class="col-lg-8" th:each="post: ${posts}">
                     <div class="panel panel-default">
@@ -89,8 +91,8 @@
                         </div>
 
                         <div class="panel-body">
-                            <label class="control-label" for="desc">Description</label>
-                            <div th:text="${post.description}" id="desc"></div>
+                            <label class="control-label" for="description">Description</label>
+                            <div th:text="${post.description}" id="description"></div>
                             <hr/>
                             <!--<label class="control-label" for="loc">Location</label>-->
                             <!--<div th:text="${post.location}" id="loc"></div>-->
