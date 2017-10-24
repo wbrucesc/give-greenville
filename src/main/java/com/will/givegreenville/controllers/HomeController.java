@@ -431,7 +431,9 @@ public class HomeController {
         targetPost.setCompleted(true);
         postRepo.save(targetPost);
         model.addAttribute("chosen", recipient);
-        SendSimpleMessage();
+        String sendTo = recipient.getEmail();
+        System.out.println(sendTo);
+        SendSimpleMessage(sendTo);
 
         return "redirect:/detail/{id}";
     }
@@ -457,14 +459,14 @@ public class HomeController {
     }
 
 
-    public static void SendSimpleMessage() {
+    public static void SendSimpleMessage(String sendTo) {
         Configuration configuration = new Configuration()
                 .domain("mg.willbruce.fun")
                 .apiKey(System.getenv("mgkey"))
-                .from("Test Account", "blank@example.com");
+                .from("Test Account", "noreply@mg.willbruce.fun");
 
         Mail.using(configuration)
-                .to("user@example.com")
+                .to(sendTo)
                 .subject("This is the subject")
                 .text("Hello world!")
                 .build()
