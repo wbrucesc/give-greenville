@@ -161,11 +161,15 @@ public class HomeController {
     // creates NEW ASK post
     @RequestMapping(value = "/createAsk", method = RequestMethod.POST)
     public String createAskPost(@ModelAttribute Post post,
+                                @RequestParam("file") MultipartFile file,
                                 Principal principal) {
         User me = userRepo.findByUsername(principal.getName());
         post.setAuthor(me);
         post.setCategory("Ask");
         post.setCreated(new Date());
+        storageService.store(file);
+        String fileName = file.getOriginalFilename();
+        post.setImagePath(fileName);
         postRepo.save(post);
         return "redirect:/ask";
     }
@@ -187,11 +191,15 @@ public class HomeController {
     // creates NEW GIVE post
     @RequestMapping(value = "/createGive", method = RequestMethod.POST)
     public String createGivePost(@ModelAttribute Post post,
+                                 @RequestParam("file") MultipartFile file,
                                  Principal principal) {
         User me = userRepo.findByUsername(principal.getName());
         post.setAuthor(me);
         post.setCategory("Give");
         post.setCreated(new Date());
+        storageService.store(file);
+        String fileName = file.getOriginalFilename();
+        post.setImagePath(fileName);
         postRepo.save(post);
         return "redirect:/give";
     }
@@ -213,11 +221,15 @@ public class HomeController {
     // creates a new FLASH GIVE post
     @RequestMapping(value = "/createFlash", method = RequestMethod.POST)
     public String createFlashPost(@ModelAttribute Post post,
+                                  @RequestParam("file") MultipartFile file,
                                   Principal principal) {
         User me = userRepo.findByUsername(principal.getName());
         post.setAuthor(me);
         post.setCategory("Flash Give");
         post.setCreated(new Date());
+        storageService.store(file);
+        String fileName = file.getOriginalFilename();
+        post.setImagePath(fileName);
         postRepo.save(post);
         return "redirect:/flash";
     }
@@ -483,7 +495,7 @@ public class HomeController {
                 .replyTo(replyTo)
                 .to(sendTo)
                 .subject("Give Greenville Notification")
-                .text("You were chosen on Give Greenville's Post" + "'" + title + "'. " +  "Email the user at " + replyTo + " to coordinate further.")
+                .text("You were chosen on Give Greenville's Post" + "'" + title + "'. " +  "Reply to this email to connect directly with the author of the post.")
                 .build()
                 .send();
     }

@@ -145,43 +145,45 @@
                 </div>
 
                 <br/>
-
-
-                <div class="col-lg-8 well" th:each="post: ${completed}">
-                    <div class="panel panel-success">
-                        <div class="panel-heading">
-                            <a class="panel-title post-title" th:text="${post.title}" th:href="@{'/detail/' + ${post.id}}"></a>
-                            <i th:if="${post.getCategory().equals('Ask')}" class="fa fa-users fa-lg pull-right"></i>
-                            <i th:if="${post.getCategory().equals('Give')}" class="fa fa-gift fa-lg pull-right"></i>
-                            <i th:if="${post.getCategory().equals('Flash Give')}" class="fa fa-bolt fa-lg pull-right"></i>
-                            <i class="fa fa-check-circle-o fa-lg pull-right"></i>
-                        </div>
-
-                        <div class="panel-body">
-                            <div class="container col-lg-4 pull-left">
-                                <a th:href="@{'/detail/' + ${post.id}}"><img class="small-pic" th:src="@{'/files/' + ${post.imagePath}}"/></a>
+                <div class="container pull-left">
+                    <h1 class="well col-lg-8">Completed Posts (5 most recent)</h1>
+                    <div class="col-lg-8 well" th:each="post: ${completed}">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <a class="panel-title post-title" th:text="${post.title}" th:href="@{'/detail/' + ${post.id}}"></a>
+                                <i th:if="${post.getCategory().equals('Ask')}" class="fa fa-users fa-lg pull-right"></i>
+                                <i th:if="${post.getCategory().equals('Give')}" class="fa fa-gift fa-lg pull-right"></i>
+                                <i th:if="${post.getCategory().equals('Flash Give')}" class="fa fa-bolt fa-lg pull-right"></i>
+                                <i class="fa fa-check-circle-o fa-lg pull-right"></i>
                             </div>
-                            <div class="container col-lg-8 pull-right">
-                                <label class="control-label" for="desc">Description</label>
-                                <div th:text="${post.description}" id="desc"></div>
-                                <hr/>
-                                <label class="control-label" for="loc">Location</label>
-                                <div th:text="${post.location}" id="loc"></div>
-                                <br/>
-                                <label class="control-label" for="poster">Poster:</label>
-                                <span class="inline" th:text="${post.author.username}" id="poster"></span>
-                                <br/>
-                                <span th:text="${post.created}"></span>
-                                <hr/>
-                                <a class="btn btn-primary btn-sm" th:href="@{'/detail/' + ${post.id}}">Considerations <span class="badge" th:text="${post.considerations.size()}"></span></a>
+
+                            <div class="panel-body">
+                                <div class="container col-lg-4 pull-left">
+                                    <a th:href="@{'/detail/' + ${post.id}}"><img class="small-pic" th:src="@{'/files/' + ${post.imagePath}}"/></a>
+                                </div>
+                                <div class="container col-lg-8 pull-right">
+                                    <label class="control-label" for="desc">Description</label>
+                                    <div th:text="${post.description}" id="desc"></div>
+                                    <hr/>
+                                    <label class="control-label" for="loc">Location</label>
+                                    <div th:text="${post.location}" id="loc"></div>
+                                    <br/>
+                                    <label class="control-label" for="poster">Poster:</label>
+                                    <span class="inline" th:text="${post.author.username}" id="poster"></span>
+                                    <br/>
+                                    <span th:text="${post.created}"></span>
+                                    <hr/>
+                                    <a class="btn btn-primary btn-sm" th:href="@{'/detail/' + ${post.id}}">Considerations <span class="badge" th:text="${post.considerations.size()}"></span></a>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+
+
                 </div>
-
-
-
             </div>
+
         </div>
 
 
