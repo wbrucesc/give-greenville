@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -47,11 +48,15 @@ public class HomeController {
             User me = userRepo.findByUsername(principal.getName());
             model.addAttribute("user", me);
             model.addAttribute("posts", postRepo.findAllByActiveIsTrueOrderByCreatedDesc());
-            model.addAttribute("completed", postRepo.findAllByCompletedIsTrueOrderByCreatedDesc());
+            List<Post> listOfPosts = postRepo.findAllByCompletedIsTrueOrderByCreatedDesc();
+            List<Post> subPosts = listOfPosts.subList(0, 5);
+            model.addAttribute("completed", subPosts);
             return "index";
         }
         model.addAttribute("posts", postRepo.findAllByActiveIsTrueOrderByCreatedDesc());
-        model.addAttribute("completed", postRepo.findAllByCompletedIsTrueOrderByCreatedDesc());
+        List<Post> listOfPosts = postRepo.findAllByCompletedIsTrueOrderByCreatedDesc();
+        List<Post> subPosts = listOfPosts.subList(0, 5);
+        model.addAttribute("completed", subPosts);
         return "index";
     }
 
@@ -130,7 +135,8 @@ public class HomeController {
                              Principal principal) {
         User me = userRepo.findByUsername(principal.getName());
         storageService.store(file);
-
+        String fileName = file.getOriginalFilename();
+        post.setImagePath(fileName);
         post.setAuthor(me);
         post.setCreated(new Date());
         post.setActive(true);
@@ -318,7 +324,7 @@ public class HomeController {
     @RequestMapping("/indexResults")
     public String searchResults(Model model,
                                 @RequestParam("search") String searchString) {
-        model.addAttribute("posts", postRepo.findAllByTitleContainsIgnoreCase(searchString));
+        model.addAttribute("posts", postRepo.findAllByActiveIsTrueAndTitleContainsIgnoreCase(searchString));
         return "index";
     }
 
@@ -366,7 +372,7 @@ public class HomeController {
             User me = userRepo.findByUsername(principal.getName());
             model.addAttribute("user", me);
             Post myPost = postRepo.findOne(id);
-            if (myPost.getAuthor() == me && myPost.isActive() == true) {
+            if (myPost.getAuthor() == me && myPost.isActive()) {
                 model.addAttribute("post", myPost);
                 return "update";
             }
@@ -432,8 +438,10 @@ public class HomeController {
         postRepo.save(targetPost);
         model.addAttribute("chosen", recipient);
         String sendTo = recipient.getEmail();
+        String replyTo = targetPost.getAuthor().getEmail();
+        String title = targetPost.getTitle();
         System.out.println(sendTo);
-        SendSimpleMessage(sendTo);
+        SendSimpleMessage(sendTo, replyTo, title);
 
         return "redirect:/detail/{id}";
     }
@@ -445,11 +453,12 @@ public class HomeController {
                                  @PathVariable("userId") long userId) {
 
         Post targetPost = postRepo.findOne(postId);
-//        System.out.println(postId);
         User recipient = userRepo.findOne(userId);
-//        System.out.println(userId);
-
         targetPost.setRecipient(recipient);
+        String sendTo = recipient.getEmail();
+        String replyTo = targetPost.getAuthor().getEmail();
+        String title = targetPost.getTitle();
+        SendSimpleMessage(sendTo, replyTo, title);
         targetPost.setActive(false);
         targetPost.setCompleted(true);
         postRepo.save(targetPost);
@@ -458,17 +467,17 @@ public class HomeController {
         return "redirect:/detail/{postId}";
     }
 
-
-    public static void SendSimpleMessage(String sendTo) {
+    // configuration for mailgun
+    public static void SendSimpleMessage(String sendTo, String replyTo, String title) {
         Configuration configuration = new Configuration()
                 .domain("mg.willbruce.fun")
                 .apiKey(System.getenv("mgkey"))
-                .from("Test Account", "noreply@mg.willbruce.fun");
+                .from("Give Greenville", "mailgun@mg.willbruce.fun");
 
         Mail.using(configuration)
                 .to(sendTo)
-                .subject("This is the subject")
-                .text("Hello world!")
+                .subject("Give Greenville Notification")
+                .text("You were chosen on Give Greenville's Post" + "'" + title + "'" +  "Email the user at " + replyTo + " to coordinate further.")
                 .build()
                 .send();
     }

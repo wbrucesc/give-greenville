@@ -12,7 +12,7 @@ public interface PostRepository extends CrudRepository<Post, Long> {
     List<Post> findAllByCategory(String categoryName);
     List<Post> OrderByCreatedDesc();
     List<Post> findAllByCategoryOrderByCreatedDesc(String categoryName);
-    List<Post> findAllByTitleContainsIgnoreCase(String searchString);
+    List<Post> findAllByActiveIsTrueAndTitleContainsIgnoreCase(String searchString);
     List<Post> findAllByCategoryAndTitleContainsIgnoreCase(String categoryName, String searchString);
     List<Post> findAllByAuthorOrderByCreatedDesc(User username);
     List<Post> findAllByActiveIsTrueOrderByCreatedDesc();
