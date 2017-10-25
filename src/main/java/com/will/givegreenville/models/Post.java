@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import javax.validation.constraints.Null;
 import java.time.DateTimeException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -52,6 +53,16 @@ public class Post {
 
     public List<Consideration> getConsiderations() {
         return considerations;
+    }
+
+    public List<String> getConsiderers() {
+        List<Consideration> considerations = getConsiderations();
+        List<String> considerers = new ArrayList<>();
+        for (Consideration consideration : considerations) {
+            String considererUsername = consideration.getUser().getUsername();
+            considerers.add(considererUsername);
+        }
+        return considerers;
     }
 
     public void setConsiderations(List<Consideration> considerations) {

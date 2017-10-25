@@ -61,6 +61,9 @@
                         <hr/>
                         <label class="control-label" for="loc">Location</label>
                         <div th:text="${formattedAddress}" id="loc"></div>
+                        <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#mapModal">
+                            Show on map
+                        </button>
                         <label class="control-label" for="poster">Poster: </label>
                         <span class="inline" th:text="${post.author.username}" id="poster"></span>
                         <hr/>
@@ -72,7 +75,7 @@
                         </ul>
 
 
-                        <a th:if="${user != null and post.getAuthor().getId() != user.getId() and post.isActive() == true}" class="btn btn-default btn-sm pull-right" th:href="@{'/consider/' + ${post.id}}">Consider Me</a>
+                        <a th:if="${user != null and post.getAuthor().getId() != user.getId() and post.isActive() == true and post.getConsiderers().contains(user.getUsername()) != true}" class="btn btn-default btn-sm pull-right" th:href="@{'/consider/' + ${post.id}}">Consider Me</a>
                         <a th:if="${user != null and post.isActive() == true and post.getAuthor().getId() == user.getId() and post.getConsiderations().size() > 1}" class="btn btn-warning btn-sm pull-right" th:href="@{'/choose/post/' + ${post.id}}">Choose Random Recipient</a>
                         <hr/>
                         <h4 th:if="${post.getCategory().equals('Ask') and post.getRecipient() != null}">Donor: </h4>
@@ -84,15 +87,41 @@
             </div>
 
             <div class="container">
-                <div class="col-lg-4 pull-right">
-                    <img th:src="${map}" alt="location on map"/>
+                <div class="col-lg-4">
+                    <img class="med-pic" th:src="@{'/files/' + ${post.imagePath}}"/>
                 </div>
             </div>
 
+            <!--<div class="container">-->
+                <!--<div class="col-lg-4">-->
+                    <!--<img th:src="${map}" alt="location on map"/>-->
+                <!--</div>-->
+            <!--</div>-->
+    </div>
 
+    <div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel" th:text="${formattedAddress}"></h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div>
+                            <img class="map-img" th:src="${map}" alt="location on map"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 
 
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </body>
 </html>

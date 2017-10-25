@@ -224,9 +224,11 @@ public class HomeController {
 
 
     // takes you to create a CONSIDERATION page ***
-    @RequestMapping("/consider/{postId}")
+    @RequestMapping("/consider/{page}/{postId}")
     public String considerForm(Model model,
+                               @ModelAttribute Post post,
                                @PathVariable("postId") long postId,
+                               @PathVariable("page") String page,
                                Principal principal) {
 
         if (principal != null) {
@@ -234,6 +236,12 @@ public class HomeController {
             model.addAttribute("user", me);
             model.addAttribute("consideration", new Consideration());
             model.addAttribute("postId", postId);
+            if (page.equals("Flash Give")) {
+                String flashPage = page.substring(0, 5).toLowerCase();
+                model.addAttribute("page", flashPage);
+            } else {
+                model.addAttribute("page", page.toLowerCase());
+            }
             return "consider";
         }
         model.addAttribute("consideration", new Consideration());
@@ -242,10 +250,11 @@ public class HomeController {
     }
 
     // creates a NEW CONSIDER on a post
-    @RequestMapping(value = "/consider/{postId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/consider/{page}/{postId}", method = RequestMethod.POST)
     public String consider(@PathVariable("postId") Long postId,
+                           @PathVariable("page") String page,
                            @ModelAttribute Consideration consideration,
-                           HttpServletRequest request,
+                           Model model,
                            Principal principal) {
         Post post = postRepo.findOne(postId);
         User me = userRepo.findByUsername(principal.getName());
@@ -255,7 +264,9 @@ public class HomeController {
             consideration.setPost(post);
             consideration.setCreated(new Date());
             considerRepo.save(consideration);
-            return "redirect:/";
+            model.addAttribute("page", page);
+            System.out.println(page);
+            return "redirect:/{page}";
         }
         return "redirect:/";
     }
@@ -271,7 +282,6 @@ public class HomeController {
             model.addAttribute("considerations", targetPost.getConsiderations());
             User me = userRepo.findByUsername(principal.getName());
             model.addAttribute("user", me);
-//        System.out.println("Author is: " + targetPost.getAuthor());
 
             Key geokey = new Key();
             MapKey mapKey = new MapKey();
@@ -287,7 +297,6 @@ public class HomeController {
 
             String address = geoCodeResults.getResults().get(0).getFormatted_address();
             model.addAttribute("formattedAddress", address);
-
 
             String locationUrl = "https://maps.googleapis.com/maps/api/staticmap?zoom=12&size=400x400&maptype=roadmap&markers=color:green%7C" + postLat + "," + postLng + "&key=" + mapKey;
             model.addAttribute("map", locationUrl);
@@ -424,13 +433,10 @@ public class HomeController {
         Post targetPost = postRepo.findOne(id);
 
         List<Consideration> considerations = targetPost.getConsiderations();
-//        System.out.println("Considerations: " + considerations);
 
         Random rand = new Random();
         Consideration randomConsideration = considerations.get(rand.nextInt(considerations.size()));
         User recipient = randomConsideration.getUser();
-
-//        System.out.println(recipient);
 
         targetPost.setActive(false);
         targetPost.setRecipient(recipient);
@@ -440,7 +446,6 @@ public class HomeController {
         String sendTo = recipient.getEmail();
         String replyTo = targetPost.getAuthor().getEmail();
         String title = targetPost.getTitle();
-        System.out.println(sendTo);
         SendSimpleMessage(sendTo, replyTo, title);
 
         return "redirect:/detail/{id}";
@@ -475,9 +480,10 @@ public class HomeController {
                 .from("Give Greenville", "mailgun@mg.willbruce.fun");
 
         Mail.using(configuration)
+                .replyTo(replyTo)
                 .to(sendTo)
                 .subject("Give Greenville Notification")
-                .text("You were chosen on Give Greenville's Post" + "'" + title + "'" +  "Email the user at " + replyTo + " to coordinate further.")
+                .text("You were chosen on Give Greenville's Post" + "'" + title + "'. " +  "Email the user at " + replyTo + " to coordinate further.")
                 .build()
                 .send();
     }

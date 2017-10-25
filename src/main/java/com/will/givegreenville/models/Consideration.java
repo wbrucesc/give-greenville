@@ -64,4 +64,11 @@ public class Consideration {
     public void setCreated(Date created) {
         this.created = created;
     }
+
+    @Override
+    public String toString() {
+        return "Consideration{" +
+                "user=" + user +
+                '}';
+    }
 }

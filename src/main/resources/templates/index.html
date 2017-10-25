@@ -137,7 +137,7 @@
                                 <hr/>
                                 <a class="btn btn-primary btn-sm" th:href="@{'/detail/' + ${post.id}}">Considerations <span class="badge" th:text="${post.considerations.size()}"></span></a>
 
-                                <a class="btn btn-default btn-sm pull-right" th:if="${user != null and post.getAuthor().getId() != user.getId()}" th:href="@{'/consider/' + ${post.id}}">Consider Me</a>
+                                <a class="btn btn-default btn-sm pull-right" th:href="@{'/consider/' + ${post.category} + '/' + ${post.id}}" th:if="${user != null and post.getAuthor().getId() != user.getId() and post.isActive() == true and post.getConsiderers().contains(user.getUsername()) != true}">Consider Me</a>
                             </div>
 
                         </div>

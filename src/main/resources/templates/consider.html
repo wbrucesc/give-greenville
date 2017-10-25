@@ -45,7 +45,7 @@
     </nav>
 
     <div class="container">
-        <form class="form-horizontal" th:object="${consideration}" th:action="@{'/consider/' + ${postId}}" method="POST">
+        <form class="form-horizontal" th:object="${consideration}" th:action="@{'/consider/' + ${page} + '/' + ${postId}}" method="POST">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <fieldset>
                 <legend>New Consideration</legend>

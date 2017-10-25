@@ -13,7 +13,25 @@
     height:auto;
 }
 
+.med-pic {
+    border: 2px solid #f5f5f5;
+    width: 350px;
+    height: auto;
+}
+
 .log-button {
     position: relative;
     top: 4px;
 }
+
+.post-title:hover {
+    text-decoration: none;
+}
+
+
+.map-img {
+    margin: auto;
+    display: flex;
+    border: 1px solid #333;
+}
+
