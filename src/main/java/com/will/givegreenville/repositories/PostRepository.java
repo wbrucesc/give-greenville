@@ -11,7 +11,7 @@ import java.util.List;
 public interface PostRepository extends CrudRepository<Post, Long> {
     List<Post> findAllByCategory(String categoryName);
     List<Post> OrderByCreatedDesc();
-    List<Post> findAllByCategoryOrderByCreatedDesc(String categoryName);
+    List<Post> findAllByActiveIsTrueAndCategoryOrderByCreatedDesc(String categoryName);
     List<Post> findAllByActiveIsTrueAndTitleContainsIgnoreCase(String searchString);
     List<Post> findAllByCategoryAndTitleContainsIgnoreCase(String categoryName, String searchString);
     List<Post> findAllByAuthorOrderByCreatedDesc(User username);

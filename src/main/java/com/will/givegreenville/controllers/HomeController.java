@@ -79,10 +79,10 @@ public class HomeController {
         if (principal != null) {
             User me = userRepo.findByUsername(principal.getName());
             model.addAttribute("user", me);
-            model.addAttribute("asks", postRepo.findAllByCategoryOrderByCreatedDesc("Ask"));
+            model.addAttribute("asks", postRepo.findAllByActiveIsTrueAndCategoryOrderByCreatedDesc("Ask"));
             return "ask";
         }
-        model.addAttribute("asks", postRepo.findAllByCategoryOrderByCreatedDesc("Ask"));
+        model.addAttribute("asks", postRepo.findAllByActiveIsTrueAndCategoryOrderByCreatedDesc("Ask"));
         return "ask";
     }
 
@@ -93,10 +93,10 @@ public class HomeController {
         if (principal != null) {
             User me = userRepo.findByUsername(principal.getName());
             model.addAttribute("user", me);
-            model.addAttribute("gives", postRepo.findAllByCategoryOrderByCreatedDesc("Give"));
+            model.addAttribute("gives", postRepo.findAllByActiveIsTrueAndCategoryOrderByCreatedDesc("Give"));
             return "give";
         }
-        model.addAttribute("gives", postRepo.findAllByCategoryOrderByCreatedDesc("Give"));
+        model.addAttribute("gives", postRepo.findAllByActiveIsTrueAndCategoryOrderByCreatedDesc("Give"));
         return "give";
     }
 
@@ -107,10 +107,10 @@ public class HomeController {
         if (principal != null) {
             User me = userRepo.findByUsername(principal.getName());
             model.addAttribute("user", me);
-            model.addAttribute("flashes", postRepo.findAllByCategoryOrderByCreatedDesc("Flash Give"));
+            model.addAttribute("flashes", postRepo.findAllByActiveIsTrueAndCategoryOrderByCreatedDesc("Flash Give"));
             return "flashGive";
         }
-        model.addAttribute("flashes", postRepo.findAllByCategoryOrderByCreatedDesc("Flash Give"));
+        model.addAttribute("flashes", postRepo.findAllByActiveIsTrueAndCategoryOrderByCreatedDesc("Flash Give"));
         return "flashGive";
     }
 
