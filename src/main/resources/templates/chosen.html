@@ -1,119 +1,122 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-    <!--<meta charset="UTF-8"/>-->
-    <!--<title>User Posts</title>-->
-    <!--<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"/>-->
-    <!--<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-h21C2fcDk/eFsW9sC9h0dhokq5pDinLNklTKoxIZRUn3+hvmgQSffLLQ4G4l2eEr" crossorigin="anonymous"/>-->
-    <!--<link rel="stylesheet" href="/assets/css/app.css"/>-->
-<!--</head>-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>User Posts</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-h21C2fcDk/eFsW9sC9h0dhokq5pDinLNklTKoxIZRUn3+hvmgQSffLLQ4G4l2eEr" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="/assets/css/app.css"/>
+</head>
 
-<!--<body>-->
-<!--&lt;!&ndash; Updated nav bar &ndash;&gt;-->
-<!--<nav class="navbar navbar-default">-->
-    <!--<div class="container-fluid">-->
-        <!--<div class="navbar-header">-->
-            <!--<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">-->
-                <!--<span class="sr-only">Toggle navigation</span>-->
-                <!--<span class="icon-bar"></span>-->
-                <!--<span class="icon-bar"></span>-->
-                <!--<span class="icon-bar"></span>-->
-            <!--</button>-->
-            <!--<a href="/"><img class="pull-left" style="position: relative; top: 7px; margin-right: 10px;" th:src="@{'/files/greenville.png'}" alt=""/></a>-->
-            <!--<a class="navbar-brand" href="/"> Give Greenville</a>-->
-        <!--</div>-->
+<body>
+    <!-- Updated nav bar -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/"><img class="pull-left" style="position: relative; top: 7px; margin-right: 10px;" th:src="@{'/files/greenville.png'}" alt=""/></a>
+                <a class="navbar-brand" href="/"> Give Greenville</a>
+            </div>
 
-        <!--<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">-->
-            <!--<ul class="nav navbar-nav">-->
-                <!--<li><a href="/ask">Want to Ask?<span class="sr-only">(current)</span></a></li>-->
-                <!--<li><a href="/give">Want to Give?</a></li>-->
-                <!--<li><a href="/flash">Give Today</a></li>-->
-            <!--</ul>-->
-            <!--<ul class="nav navbar-nav navbar-right">-->
-                <!--<li><a th:if="${user != null}" th:text="${'@' + user.getUsername()}" href="/myPosts"></a></li>-->
-                <!--<li><a href="/about">ABOUT</a></li>-->
-                <!--<li>-->
-                    <!--<form class="pull-right" action="/logout" method="POST">-->
-                        <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
-                        <!--<button th:if="${user != null}" class="btn btn-default log-button" type="submit" value="LOGOUT">LOGOUT</button>-->
-                        <!--<a th:if="${user == null}" class="btn btn-default log-button" href="/login">LOGIN</a>-->
-                    <!--</form>-->
-                <!--</li>-->
-            <!--</ul>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</nav>-->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="/ask">Want to Ask?<span class="sr-only">(current)</span></a></li>
+                    <li><a href="/give">Want to Give?</a></li>
+                    <li><a href="/flash">Give Today</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a th:if="${user != null}" th:text="${'@' + user.getUsername()}" href="/myPosts"></a></li>
+                    <li><a href="/about">ABOUT</a></li>
+                    <li>
+                        <form class="pull-right" action="/logout" method="POST">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button th:if="${user != null}" class="btn btn-default log-button" type="submit" value="LOGOUT">LOGOUT</button>
+                            <a th:if="${user == null}" class="btn btn-default log-button" href="/login">LOGIN</a>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-<!--<div class="container">-->
-    <!--<div class="container-fluid well">-->
-        <!--<h1 class="pull-left">My Posts</h1>-->
-        <!--<a class="btn btn-success pull-right" href="/create">Create New Post</a>-->
-    <!--</div>-->
-<!--</div>-->
+    <div class="container">
+        <div class="container-fluid well">
+            <h1 class="pull-left">My Chosen posts</h1>
+            <a class="btn btn-success pull-right" href="/create">Create New Post</a>
+        </div>
+    </div>
 
-<!--<div class="container">-->
-    <!--<div class="row">-->
-        <!--<div class="col-lg-8 col-lg-offset-2" th:each="post: ${myPosts}">-->
-            <!--<div class="panel panel-default">-->
-                <!--<div class="panel-heading">-->
-                    <!--<a class="panel-title post-title" th:text="${post.title}" th:href="@{'/detail/' + ${post.id}}"></a>-->
-                    <!--<i th:if="${post.getCategory().equals('Ask')}" class="fa fa-users fa-lg pull-left"></i>-->
-                    <!--<i th:if="${post.getCategory().equals('Give')}" class="fa fa-gift fa-lg pull-left"></i>-->
-                    <!--<i th:if="${post.getCategory().equals('Flash Give')}" class="fa fa-bolt fa-lg pull-left"></i>-->
-                    <!--<a class="btn btn-danger btn-sm pull-right" th:if="${post.isActive() == true}" th:href="@{'/delete/post/' + ${post.id}}">Delete Post</a>-->
-                <!--</div>-->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 pull-right">
 
-                <!--<div class="panel-body">-->
-                    <!--<label class="control-label" for="desc">Description</label>-->
-                    <!--<div th:text="${post.description}" id="desc"></div>-->
-                    <!--<hr/>-->
-                    <!--<label class="control-label" for="loc">Location</label>-->
-                    <!--<div th:text="${post.location}" id="loc"></div>-->
-                    <!--<br/>-->
-                    <!--<label class="control-label" for="poster">Poster:</label>-->
-                    <!--<span class="inline" th:text="${post.author.username}" id="poster"></span>-->
-                    <!--<br/>-->
-                    <!--<span th:text="${post.created}"></span>-->
-                    <!--<hr/>-->
-                    <!--<a  class="btn btn-primary btn-sm" th:href="@{'/detail/' + ${post.id}}">Considerations <span class="badge" th:text="${post.considerations.size()}"></span></a>-->
-                    <!--<a th:if="${post.isActive() == true}" class="btn btn-default btn-sm pull-right" th:href="@{'/edit/post/' + ${post.id}}">Edit Post</a>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
+                <div class="container well col-lg-12">
+                    <legend>Types of Posts</legend>
+                    <h4><i class="fa fa-thumbs-up icon"></i>Chosen Posts</h4>
+                    <p>Chosen posts are posts where a user was chosen to be either the recipient (from a Give Post) or the donor (from an Ask Post).</p>
+                    <br/>
+                    <h4><i class="fa fa-users icon"></i>Ask Posts</h4>
+                    <p>An ask post allows a user to reach out to the community if they are in need of a certain resource. </p>
+                    <br/>
+                    <h4><i class="fa fa-gift icon"></i>Give Posts</h4>
+                    <p>A give post allows a user to post item(s) that they would like to give away. </p>
+                    <br/>
+                    <h4><i class="fa fa-bolt icon"></i>Flash Give Posts</h4>
+                    <p>A flash give post allows a user to post item(s) that they would like to give away but in a more urgent time frame.
+                        <br/>
+                        <small>Example: "I need to find a new home for this gently used microwave by tomorrow before I move out of town."</small>
+                    </p>
+                    <br/>
+                    <h4><i class="fa fa-check-circle-o icon"></i>Success Posts</h4>
+                    <div class="well">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                These posts have been completed!
+                                <i class="fa fa-check-circle-o icon pull-right"></i>
+                            </div>
+                            <div class="panel-body">
+                                Success! These posts are no longer active but their details can still be viewed.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <!--<div class="col-lg-8 col-lg-offset-2 well" th:each="post: ${completed}">-->
-            <!--<div class="panel panel-success">-->
-                <!--<div class="panel-heading">-->
-                    <!--<a class="panel-title post-title" th:text="${post.title}" th:href="@{'/detail/' + ${post.id}}"></a>-->
-                    <!--<i th:if="${post.getCategory().equals('Ask')}" class="fa fa-users fa-lg pull-right"></i>-->
-                    <!--<i th:if="${post.getCategory().equals('Give')}" class="fa fa-gift fa-lg pull-right"></i>-->
-                    <!--<i th:if="${post.getCategory().equals('Flash Give')}" class="fa fa-bolt fa-lg pull-right"></i>-->
-                    <!--<i class="fa fa-check-circle-o fa-lg pull-right"></i>-->
-                <!--</div>-->
+            <div class="col-lg-8" th:each="post : ${chosenPosts}">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <a class="panel-title post-title" th:text="${post.title}" th:href="@{'/detail/' + ${post.id}}">Panel title</a>
+                        <i class="fa fa-thumbs-up fa-lg pull-right"></i>
+                    </div>
+                    <div class="panel-body">
+                        <div class="container col-lg-4 pull-left">
+                            <a th:href="@{'/detail/' + ${post.id}}"><img th:src="@{'/files/' + ${post.imagePath}}" style="width: 200px; height: auto;"/></a>
+                        </div>
+                        <div class="container col-lg-8 pull-right">
+                            <label class="control-label" for="desc">Description</label>
+                            <div th:text="${post.description}" id="desc"></div>
+                            <hr/>
+                            <label class="control-label" for="loc">Location</label>
+                            <div th:text="${post.location}" id="loc"></div>
+                            <br/>
+                            <label class="control-label" for="poster">Poster:</label>
+                            <span class="inline" th:text="${post.author.username}" id="poster"></span>
+                            <br/>
+                            <span th:text="${post.created}"></span>
+                            <hr/>
+                            <a class="btn btn-primary btn-sm" th:href="@{'/detail/' + ${post.id}}">Considerations <span class="badge" th:text="${post.considerations.size()}"></span></a>
 
-                <!--<div class="panel-body">-->
-                    <!--<label class="control-label" for="desc">Description</label>-->
-                    <!--<div th:text="${post.description}" id="desc"></div>-->
-                    <!--<hr/>-->
-                    <!--<label class="control-label" for="loc">Location</label>-->
-                    <!--<div th:text="${post.location}" id="loc"></div>-->
-                    <!--<br/>-->
-                    <!--<label class="control-label" for="poster">Poster:</label>-->
-                    <!--<span class="inline" th:text="${post.author.username}" id="poster"></span>-->
-                    <!--<br/>-->
-                    <!--<span th:text="${post.created}"></span>-->
-                    <!--<hr/>-->
-                    <!--<a class="btn btn-primary btn-sm" th:href="@{'/detail/' + ${post.id}}">Considerations <span class="badge" th:text="${post.considerations.size()}"></span></a>-->
-                <!--</div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-
-            <!--</div>-->
-        <!--</div>-->
-
-
-
-    <!--</div>-->
-<!--</div>-->
-
-<!--</body>-->
-<!--</html>-->
+</body>
+</html>

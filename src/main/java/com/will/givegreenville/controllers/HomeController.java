@@ -384,6 +384,15 @@ public class HomeController {
         return "myPosts";
     }
 
+    @RequestMapping("/chosen")
+    public String chosenPosts(Model model,
+                              Principal principal) {
+        User me = userRepo.findByUsername(principal.getName());
+        model.addAttribute("user", me);
+        model.addAttribute("chosenPosts", postRepo.findAllByRecipientOrderByCreatedDesc(me));
+        return "chosen";
+    }
+
     // takes you to edit form for selected post from myPosts page ***
     @RequestMapping("/edit/post/{id}")
     public String editForm(Model model,

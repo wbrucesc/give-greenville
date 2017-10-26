@@ -44,16 +44,52 @@
         </div>
     </nav>
 
+
+
     <div class="container">
         <div class="container-fluid well">
             <h1 class="pull-left">My Posts</h1>
             <a class="btn btn-success pull-right" href="/create">Create New Post</a>
+            <a class="btn btn-default pull-right" href="/chosen">See Chosen posts</a>
         </div>
     </div>
 
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2" th:each="post: ${myPosts}">
+            <div class="col-lg-4 pull-right">
+                <div class="container well col-lg-12">
+                    <legend>Types of Posts</legend>
+                    <h4><i class="fa fa-thumbs-up icon"></i>Chosen Posts</h4>
+                    <p>Chosen posts are posts where a user was chosen to be either the recipient (from a Give Post) or the donor (from an Ask Post).</p>
+                    <br/>
+                    <h4><i class="fa fa-users icon"></i>Ask Posts</h4>
+                    <p>An ask post allows a user to reach out to the community if they are in need of a certain resource. </p>
+                    <br/>
+                    <h4><i class="fa fa-gift icon"></i>Give Posts</h4>
+                    <p>A give post allows a user to post item(s) that they would like to give away. </p>
+                    <br/>
+                    <h4><i class="fa fa-bolt icon"></i>Flash Give Posts</h4>
+                    <p>A flash give post allows a user to post item(s) that they would like to give away but in a more urgent time frame.
+                        <br/>
+                        <small>Example: "I need to find a new home for this gently used microwave by tomorrow before I move out of town."</small>
+                    </p>
+                    <br/>
+                    <h4><i class="fa fa-check-circle-o icon"></i>Success Posts</h4>
+                    <div class="well">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                These posts have been completed!
+                                <i class="fa fa-check-circle-o icon pull-right"></i>
+                            </div>
+                            <div class="panel-body">
+                                Success! These posts are no longer active but their details can still be viewed.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8" th:each="post: ${myPosts}">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <a class="panel-title post-title" th:text="${post.title}" th:href="@{'/detail/' + ${post.id}}"></a>
@@ -80,35 +116,38 @@
                     </div>
                 </div>
             </div>
+            <br/>
 
-            <div class="col-lg-8 col-lg-offset-2 well" th:each="post: ${completed}">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <a class="panel-title post-title" th:text="${post.title}" th:href="@{'/detail/' + ${post.id}}"></a>
-                        <i th:if="${post.getCategory().equals('Ask')}" class="fa fa-users fa-lg pull-right"></i>
-                        <i th:if="${post.getCategory().equals('Give')}" class="fa fa-gift fa-lg pull-right"></i>
-                        <i th:if="${post.getCategory().equals('Flash Give')}" class="fa fa-bolt fa-lg pull-right"></i>
-                        <i class="fa fa-check-circle-o fa-lg pull-right"></i>
+            <div class="container pull-left">
+                <h1>My Completed Posts</h1>
+                <div class="col-lg-8 well" th:each="post: ${completed}">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <a class="panel-title post-title" th:text="${post.title}" th:href="@{'/detail/' + ${post.id}}"></a>
+                            <i th:if="${post.getCategory().equals('Ask')}" class="fa fa-users fa-lg pull-right"></i>
+                            <i th:if="${post.getCategory().equals('Give')}" class="fa fa-gift fa-lg pull-right"></i>
+                            <i th:if="${post.getCategory().equals('Flash Give')}" class="fa fa-bolt fa-lg pull-right"></i>
+                            <i class="fa fa-check-circle-o fa-lg pull-right"></i>
+                        </div>
+
+                        <div class="panel-body">
+                            <label class="control-label" for="desc">Description</label>
+                            <div th:text="${post.description}" id="desc"></div>
+                            <hr/>
+                            <label class="control-label" for="loc">Location</label>
+                            <div th:text="${post.location}" id="loc"></div>
+                            <br/>
+                            <label class="control-label" for="poster">Poster:</label>
+                            <span class="inline" th:text="${post.author.username}" id="poster"></span>
+                            <br/>
+                            <span th:text="${post.created}"></span>
+                            <hr/>
+                            <a class="btn btn-primary btn-sm" th:href="@{'/detail/' + ${post.id}}">Considerations <span class="badge" th:text="${post.considerations.size()}"></span></a>
+                        </div>
                     </div>
-
-                    <div class="panel-body">
-                        <label class="control-label" for="desc">Description</label>
-                        <div th:text="${post.description}" id="desc"></div>
-                        <hr/>
-                        <!--<label class="control-label" for="loc">Location</label>-->
-                        <!--<div th:text="${post.location}" id="loc"></div>-->
-                        <!--<br/>-->
-                        <label class="control-label" for="poster">Poster:</label>
-                        <span class="inline" th:text="${post.author.username}" id="poster"></span>
-                        <br/>
-                        <span th:text="${post.created}"></span>
-                        <hr/>
-                        <a class="btn btn-primary btn-sm" th:href="@{'/detail/' + ${post.id}}">Considerations <span class="badge" th:text="${post.considerations.size()}"></span></a>
-                    </div>
-
-
                 </div>
             </div>
+
 
 
 
