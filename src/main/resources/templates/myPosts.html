@@ -100,19 +100,24 @@
                     </div>
 
                     <div class="panel-body">
-                        <label class="control-label" for="desc">Description</label>
-                        <div th:text="${post.description}" id="desc"></div>
-                        <hr/>
-                        <label class="control-label" for="loc">Location</label>
-                        <div th:text="${post.location}" id="loc"></div>
-                        <br/>
-                        <label class="control-label" for="poster">Poster:</label>
-                        <span class="inline" th:text="${post.author.username}" id="poster"></span>
-                        <br/>
-                        <span th:text="${post.created}"></span>
-                        <hr/>
-                        <a  class="btn btn-primary btn-sm" th:href="@{'/detail/' + ${post.id}}">Considerations <span class="badge" th:text="${post.considerations.size()}"></span></a>
-                        <a th:if="${post.isActive() == true}" class="btn btn-default btn-sm pull-right" th:href="@{'/edit/post/' + ${post.id}}">Edit Post</a>
+                        <div class="container col-lg-4 pull-left">
+                            <a th:href="@{'/detail/' + ${post.id}}"><img th:src="@{'https://s3.amazonaws.com/ggimageuploads/' + ${post.imagePath}}" style="width: 200px; height: auto;"/></a>
+                        </div>
+                        <div class="container col-lg-8 pull-right">
+                            <label class="control-label" for="desc">Description</label>
+                            <div th:text="${post.description}" id="desc"></div>
+                            <hr/>
+                            <label class="control-label" for="loc">Location</label>
+                            <div th:text="${post.location}" id="loc"></div>
+                            <br/>
+                            <label class="control-label" for="poster">Poster:</label>
+                            <span class="inline" th:text="${post.author.username}" id="poster"></span>
+                            <br/>
+                            <span th:text="${post.created}"></span>
+                            <hr/>
+                            <a  class="btn btn-primary btn-sm" th:href="@{'/detail/' + ${post.id}}">Considerations <span class="badge" th:text="${post.considerations.size()}"></span></a>
+                            <a th:if="${post.isActive() == true}" class="btn btn-default btn-sm pull-right" th:href="@{'/edit/post/' + ${post.id}}">Edit Post</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -131,26 +136,28 @@
                         </div>
 
                         <div class="panel-body">
-                            <label class="control-label" for="desc">Description</label>
-                            <div th:text="${post.description}" id="desc"></div>
-                            <hr/>
-                            <label class="control-label" for="loc">Location</label>
-                            <div th:text="${post.location}" id="loc"></div>
-                            <br/>
-                            <label class="control-label" for="poster">Poster:</label>
-                            <span class="inline" th:text="${post.author.username}" id="poster"></span>
-                            <br/>
-                            <span th:text="${post.created}"></span>
-                            <hr/>
-                            <a class="btn btn-primary btn-sm" th:href="@{'/detail/' + ${post.id}}">Considerations <span class="badge" th:text="${post.considerations.size()}"></span></a>
+                            <div class="container col-lg-4 pull-left">
+                                <a th:href="@{'/detail/' + ${post.id}}"><img th:src="@{'https://s3.amazonaws.com/ggimageuploads/' + ${post.imagePath}}" style="width: 200px; height: auto;"/></a>
+                            </div>
+                            <div class="container col-lg-8 pull-right">
+                                <label class="control-label" for="desc">Description</label>
+                                <div th:text="${post.description}" id="desc"></div>
+                                <hr/>
+                                <label class="control-label" for="loc">Location</label>
+                                <div th:text="${post.location}" id="loc"></div>
+                                <br/>
+                                <label class="control-label" for="poster">Poster:</label>
+                                <span class="inline" th:text="${post.author.username}" id="poster"></span>
+                                <br/>
+                                <span th:text="${post.created}"></span>
+                                <hr/>
+                                <a class="btn btn-primary btn-sm" th:href="@{'/detail/' + ${post.id}}">Considerations <span class="badge" th:text="${post.considerations.size()}"></span></a>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
-
         </div>
     </div>
 

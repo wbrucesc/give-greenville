@@ -103,7 +103,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="container col-lg-4 pull-left">
-                            <a th:href="@{'/detail/' + ${give.id}}"><img th:src="@{'/files/' + ${give.imagePath}}" style="width: 200px; height: auto;"/></a>
+                            <a th:href="@{'/detail/' + ${give.id}}"><img th:src="@{'https://s3.amazonaws.com/ggimageuploads/' + ${give.imagePath}}" style="width: 200px; height: auto;"/></a>
                         </div>
                         <div class="container col-lg-8 pull-right">
                             <label class="control-label" for="desc">Description</label>
@@ -121,7 +121,6 @@
 
                             <a class="btn btn-default btn-sm pull-right" th:if="${user != null and give.getAuthor().getId() != user.getId() and give.isActive() == true and give.getConsiderers().contains(user.getUsername()) != true}" th:href="@{'/consider/' + ${give.category} + '/' + ${give.id}}">Consider Me</a>
                         </div>
-
                     </div>
                 </div>
             </div>

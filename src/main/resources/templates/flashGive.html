@@ -102,7 +102,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="container col-lg-4 pull-left">
-                            <a th:href="@{'/detail/' + ${flash.id}}"><img th:src="@{'/files/' + ${flash.imagePath}}" style="width: 200px; height: auto;"/></a>
+                            <a th:href="@{'/detail/' + ${flash.id}}"><img th:src="@{'https://s3.amazonaws.com/ggimageuploads/' + ${flash.imagePath}}" style="width: 200px; height: auto;"/></a>
                         </div>
                         <div class="container col-lg-8 pull-right">
                             <label class="control-label" for="desc">Description</label>
