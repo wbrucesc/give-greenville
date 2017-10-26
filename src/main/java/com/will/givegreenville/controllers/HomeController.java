@@ -419,6 +419,7 @@ public class HomeController {
         User me = userRepo.findByUsername(principal.getName());
         post.setAuthor(me);
         post.setCreated(new Date());
+        post.setActive(true);
         postRepo.save(post);
         return "redirect:/myPosts";
     }
