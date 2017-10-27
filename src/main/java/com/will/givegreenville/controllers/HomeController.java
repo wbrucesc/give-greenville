@@ -256,9 +256,8 @@ public class HomeController {
             }
             return "consider";
         }
-        model.addAttribute("consideration", new Consideration());
-        model.addAttribute("postId", postId);
-        return "consider";
+        model.addAttribute("page", page);
+        return "redirect:/{page}";
     }
 
     // creates a NEW CONSIDER on a post

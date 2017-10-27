@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.security.Principal;
+
 @Controller
 public class UserController {
 
@@ -43,4 +45,32 @@ public class UserController {
         userRepo.save(user);
         return "redirect:/login";
     }
+
+    // takes admin user to create mod page/form
+    @RequestMapping(value = "/addMod")
+    public String addModeratorForm(Model model,
+                               Principal principal) {
+        if (principal != null) {
+            User me = userRepo.findByUsername(principal.getName());
+            if (me.getRole().getName().equals("ROLE_ADMIN")) {
+                model.addAttribute("user", new User());
+                return "addMod";
+            }
+            return "login";
+        }
+        return "login";
+    }
+
+    // creates new moderator
+    @RequestMapping(value = "/addMod", method = RequestMethod.POST)
+    public String addModerator(@ModelAttribute User user) {
+        Role modRole = roleRepo.findByName("ROLE_MODERATOR");
+        String encryptedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+        user.setPassword(encryptedPassword);
+        user.setRole(modRole);
+        user.setActive(true);
+        userRepo.save(user);
+        return "redirect:/";
+    }
+
 }

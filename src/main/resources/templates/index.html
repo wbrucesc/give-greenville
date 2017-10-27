@@ -29,8 +29,21 @@
                     <li><a href="/give">Want to Give?</a></li>
                     <li><a href="/flash">Give Today</a></li>
                 </ul>
+
                 <ul class="nav navbar-nav navbar-right">
                     <li><a th:if="${user != null}" th:text="${'@' + user.getUsername()}" href="/myPosts"></a></li>
+                    <li class="dropdown">
+                        <a th:if="${user != null and user.getRole().getName().equals('ROLE_ADMIN') == true}" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">ADMIN<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="/addMod">Add Moderator</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a th:if="${user != null and user.getRole().getName().equals('ROLE_MODERATOR') == true}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">MODERATOR<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="/flagged">Flagged Posts</a></li>
+                        </ul>
+                    </li>
                     <li><a href="/about">ABOUT</a></li>
                     <li>
                         <form class="pull-right" action="/logout" method="POST">
@@ -103,11 +116,7 @@
                         </div>
                         <h4><i class="fa fa-thumbs-up icon"></i>Chosen Posts</h4>
                         <p>Chosen posts are posts where a user was chosen to be either the recipient (from a Give Post) or the donor (from an Ask Post).</p>
-
-
                     </div>
-
-
                 </div>
 
 
@@ -115,10 +124,14 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <a class="panel-title post-title" th:text="${post.title}" th:href="@{'/detail/' + ${post.id}}"></a>
+                            <div class="pull-right">
+                                <form class="form-horizontal" th:action="@{'/flag/' + ${post.id}}">
+                                    <button type="submit" formmethod="post"><i th:if="${user != null and user.getRole().getName().equals('ROLE_MODERATOR') == true}" class="fa fa-flag pull-right flag-button"></i></button>
+                                </form>
+                            </div>
                             <i th:if="${post.getCategory().equals('Ask')}" class="fa fa-users fa-lg pull-right"></i>
                             <i th:if="${post.getCategory().equals('Give')}" class="fa fa-gift fa-lg pull-right"></i>
                             <i th:if="${post.getCategory().equals('Flash Give')}" class="fa fa-bolt fa-lg pull-right"></i>
-
                         </div>
 
                         <div class="panel-body">
@@ -138,10 +151,8 @@
                                 <span th:text="${post.created}"></span>
                                 <hr/>
                                 <a class="btn btn-primary btn-sm" th:href="@{'/detail/' + ${post.id}}">Considerations <span class="badge" th:text="${post.considerations.size()}"></span></a>
-
                                 <a class="btn btn-default btn-sm pull-right" th:href="@{'/consider/' + ${post.category} + '/' + ${post.id}}" th:if="${user != null and post.getAuthor().getId() != user.getId() and post.isActive() == true and post.getConsiderers().contains(user.getUsername()) != true}">Consider Me</a>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -180,15 +191,12 @@
                             </div>
                         </div>
                     </div>
-
-
-
                 </div>
             </div>
-
         </div>
 
 
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -33,6 +33,9 @@ public class Post {
     @ColumnDefault(value = "false")
     private boolean completed;
 
+    @ColumnDefault(value = "false")
+    private boolean flagged;
+
     @Column(name = "image_path")
     private String imagePath;
 
@@ -155,5 +158,13 @@ public class Post {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public boolean isFlagged() {
+        return flagged;
+    }
+
+    public void setFlagged(boolean flagged) {
+        this.flagged = flagged;
     }
 }

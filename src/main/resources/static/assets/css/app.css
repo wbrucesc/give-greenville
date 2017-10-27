@@ -19,6 +19,11 @@
     height: auto;
 }
 
+.flag-button {
+    background: none;
+    border: none;
+}
+
 .log-button {
     position: relative;
     top: 4px;
