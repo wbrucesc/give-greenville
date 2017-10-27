@@ -49,14 +49,20 @@ public class HomeController {
             model.addAttribute("user", me);
             model.addAttribute("posts", postRepo.findAllByActiveIsTrueOrderByCreatedDesc());
             List<Post> listOfPosts = postRepo.findAllByCompletedIsTrueOrderByCreatedDesc();
-            List<Post> subPosts = listOfPosts.subList(0, 5);
-            model.addAttribute("completed", subPosts);
+            if (listOfPosts.size() >= 5) {
+                List<Post> subPosts = listOfPosts.subList(0, 5);
+                model.addAttribute("completed", subPosts);
+                return "index";
+            }
             return "index";
         }
         model.addAttribute("posts", postRepo.findAllByActiveIsTrueOrderByCreatedDesc());
         List<Post> listOfPosts = postRepo.findAllByCompletedIsTrueOrderByCreatedDesc();
-        List<Post> subPosts = listOfPosts.subList(0, 5);
-        model.addAttribute("completed", subPosts);
+        if (listOfPosts.size() >= 5) {
+            List<Post> subPosts = listOfPosts.subList(0, 5);
+            model.addAttribute("completed", subPosts);
+            return "index";
+        }
         return "index";
     }
 

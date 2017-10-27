@@ -20,32 +20,36 @@
 
 
     <div class="container">
-        <fieldset>
-            <legend><h1>User Login</h1></legend>
-            <form class="form-horizontal" action="/login" th:object="${user}" method="POST">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <div class="form-group">
-                    <label class="control-label col-lg-2">Username</label>
-                    <div class="col-lg-6">
-                        <input class="form-control" type="text" th:field="*{username}"/>
-                    </div>
-                </div>
-                <br/>
-                <div class="form-group">
-                    <label class="control-label col-lg-2">Password</label>
-                    <div class="col-lg-6">
-                        <input class="form-control" type="password" th:field="*{password}"/>
-                    </div>
-                </div>
-                <br/>
-                <div class="form-group">
-                    <div class="col-lg-6 col-lg-offset-2">
-                        <input class="btn btn-success" type="submit" value="Login"/>
-                    </div>
-                </div>
-            </form>
-        </fieldset>
-        <span class="pull-right">Don't have an account? <a href="/signup">Create an Account</a></span>
+        <div class="row">
+            <div class="col-lg-8">
+                <fieldset>
+                    <legend><h1>User Login</h1></legend>
+                    <form class="form-horizontal" action="/login" th:object="${user}" method="POST">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <div class="form-group">
+                            <label class="control-label col-lg-2">Username</label>
+                            <div class="col-lg-6">
+                                <input class="form-control" type="text" th:field="*{username}" placeholder="Enter username"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2">Password</label>
+                            <div class="col-lg-6">
+                                <input class="form-control" type="password" th:field="*{password}" placeholder="Enter password"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="form-group">
+                            <div class="col-lg-6 col-lg-offset-2">
+                                <input class="btn btn-success" type="submit" value="Login"/>
+                            </div>
+                        </div>
+                    </form>
+                </fieldset>
+                <span class="pull-right">Don't have an account? <a href="/signup">Create an Account</a></span>
+            </div>
+        </div>
     </div>
 
 </body>
