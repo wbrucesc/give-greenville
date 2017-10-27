@@ -125,7 +125,7 @@
                         <div class="panel-heading">
                             <a class="panel-title post-title" th:text="${post.title}" th:href="@{'/detail/' + ${post.id}}"></a>
                             <div class="pull-right">
-                                <form class="form-horizontal" th:action="@{'/flag/' + ${post.id}}">
+                                <form class="form-horizontal" th:if="${user != null and user.getRole().getName().equals('ROLE_MODERATOR') == true}" th:action="@{'/flag/' + ${post.id}}">
                                     <button type="submit" formmethod="post"><i th:if="${user != null and user.getRole().getName().equals('ROLE_MODERATOR') == true}" class="fa fa-flag pull-right flag-button"></i></button>
                                 </form>
                             </div>

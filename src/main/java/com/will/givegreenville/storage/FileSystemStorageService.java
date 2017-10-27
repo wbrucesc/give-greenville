@@ -56,9 +56,6 @@ import java.util.stream.Stream;
                 ObjectMetadata meta = new ObjectMetadata();
                 meta.setContentLength(file.getSize());
 
-//                File convFile = new File(file.getOriginalFilename());
-//                file.transferTo(convFile);
-
 
                  PutObjectRequest request = new PutObjectRequest(bucketName, fileName, file.getInputStream(), meta)
                         .withCannedAcl(CannedAccessControlList.PublicRead);

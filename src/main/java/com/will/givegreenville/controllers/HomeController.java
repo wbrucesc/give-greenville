@@ -170,6 +170,7 @@ public class HomeController {
         storageService.store(file);
         String fileName = file.getOriginalFilename();
         post.setImagePath(fileName);
+        post.setActive(true);
         postRepo.save(post);
         return "redirect:/ask";
     }
@@ -200,6 +201,7 @@ public class HomeController {
         storageService.store(file);
         String fileName = file.getOriginalFilename();
         post.setImagePath(fileName);
+        post.setActive(true);
         postRepo.save(post);
         return "redirect:/give";
     }
@@ -230,6 +232,7 @@ public class HomeController {
         storageService.store(file);
         String fileName = file.getOriginalFilename();
         post.setImagePath(fileName);
+        post.setActive(true);
         postRepo.save(post);
         return "redirect:/flash";
     }
@@ -378,7 +381,7 @@ public class HomeController {
                               Principal principal) {
         User me = userRepo.findByUsername(principal.getName());
         model.addAttribute("user", me);
-        model.addAttribute("myPosts", postRepo.findAllByAuthorAndActiveIsTrueOrderByConsiderationsDesc(me));
+        model.addAttribute("myPosts", postRepo.findAllByAuthorAndActiveIsTrueOrderByCreatedDesc(me));
         model.addAttribute("completed", postRepo.findAllByAuthorAndCompletedIsTrueOrderByCreatedDesc(me));
         return "myPosts";
     }
@@ -414,11 +417,15 @@ public class HomeController {
     // updates post
     @RequestMapping(value = "/edit/post/{id}", method = RequestMethod.POST)
     public String updatePost(@ModelAttribute Post post,
+                             @RequestParam("file") MultipartFile file,
                              Principal principal) {
         User me = userRepo.findByUsername(principal.getName());
         post.setAuthor(me);
         post.setCreated(new Date());
         post.setActive(true);
+        storageService.store(file);
+        String fileName = file.getOriginalFilename();
+        post.setImagePath(fileName);
         postRepo.save(post);
         return "redirect:/myPosts";
     }
