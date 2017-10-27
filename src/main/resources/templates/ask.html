@@ -9,7 +9,7 @@
 </head>
 <body>
 
-    <!-- Updated nav bar -->
+    <!-- Updated nav bar * -->
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -30,7 +30,14 @@
                     <li><a href="/flash">Give Today</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a th:if="${user != null}" th:text="${'@' + user.getUsername()}" href="/myPosts"></a></li>
+                    <li class="dropdown">
+                        <a th:if="${user != null}" th:text="${'@' + user.getUsername()}" class="dropdown-toggle" data-toggle="dropdown"></a>
+                        <ul class="dropdown-menu">
+                            <li><a th:if="${user != null}" href="/myPosts">My Posts</a></li>
+                            <li><a href="/chosen">Chosen Posts</a></li>
+                        </ul>
+                    </li>
+                    <!--<li><a th:if="${user != null}" th:text="${'@' + user.getUsername()}" href="/myPosts"></a></li>-->
                     <li><a href="/about">ABOUT</a></li>
                     <li>
                         <form class="pull-right" action="/logout" method="POST">
@@ -127,6 +134,7 @@
 
 
 
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </body>
 </html>

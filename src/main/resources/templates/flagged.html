@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/assets/css/app.css"/>
 </head>
 <body>
-    <!-- Updated nav bar -->
+    <!-- Updated nav bar * -->
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -30,7 +30,14 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a th:if="${user != null}" th:text="${'@' + user.getUsername()}" href="/myPosts"></a></li>
+                    <li class="dropdown">
+                        <a th:if="${user != null}" th:text="${'@' + user.getUsername()}" class="dropdown-toggle" data-toggle="dropdown"></a>
+                        <ul class="dropdown-menu">
+                            <li><a th:if="${user != null}" href="/myPosts">My Posts</a></li>
+                            <li><a href="/chosen">Chosen Posts</a></li>
+                        </ul>
+                    </li>
+                    <!--<li><a th:if="${user != null}" th:text="${'@' + user.getUsername()}" href="/myPosts"></a></li>-->
                     <li class="dropdown">
                         <a th:if="${user != null and user.getRole().getName().equals('ROLE_ADMIN') == true}" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">ADMIN<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">

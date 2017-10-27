@@ -466,6 +466,7 @@ public class HomeController {
         Consideration randomConsideration = considerations.get(rand.nextInt(considerations.size()));
         User recipient = randomConsideration.getUser();
 
+
         targetPost.setActive(false);
         targetPost.setRecipient(recipient);
         targetPost.setCompleted(true);

@@ -9,7 +9,7 @@
 </head>
 <body>
 
-    <!-- Updated nav bar -->
+    <!-- Updated nav bar * -->
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -30,7 +30,14 @@
                     <li><a href="/flash">Give Today</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a th:if="${user != null}" th:text="${'@' + user.getUsername()}" href="/myPosts"></a></li>
+                    <li class="dropdown">
+                        <a th:if="${user != null}" th:text="${'@' + user.getUsername()}" class="dropdown-toggle" data-toggle="dropdown"></a>
+                        <ul class="dropdown-menu">
+                            <li><a th:if="${user != null}" href="/myPosts">My Posts</a></li>
+                            <li><a href="/chosen">Chosen Posts</a></li>
+                        </ul>
+                    </li>
+                    <!--<li><a th:if="${user != null}" th:text="${'@' + user.getUsername()}" href="/myPosts"></a></li>-->
                     <li><a href="/about">ABOUT</a></li>
                     <li>
                         <form class="pull-right" action="/logout" method="POST">
@@ -91,12 +98,6 @@
                     <img class="med-pic" th:src="@{'https://s3.amazonaws.com/ggimageuploads/' + ${post.imagePath}}"/>
                 </div>
             </div>
-
-            <!--<div class="container">-->
-                <!--<div class="col-lg-4">-->
-                    <!--<img th:src="${map}" alt="location on map"/>-->
-                <!--</div>-->
-            <!--</div>-->
     </div>
 
     <div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
